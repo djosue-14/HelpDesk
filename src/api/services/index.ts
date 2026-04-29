@@ -1,0 +1,8 @@
+export { dashboardService } from './dashboardService'
+export { departmentService } from './departmentService'
+export { scoreService } from './scoreService'
+export { slaConfigurationService } from './slaConfigurationService'
+export { supportTypeAgentService } from './supportTypeAgentService'
+export { supportTypeService } from './supportTypeService'
+export { ticketCommentService } from './ticketCommentService'
+export { ticketService } from './ticketService'

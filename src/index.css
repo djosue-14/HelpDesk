@@ -1,0 +1,25 @@
+@import "tailwindcss";
+@import "./theme/colors.css";
+
+/* Tipografía base del sistema de diseño */
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Transiciones suaves al cambiar de tema */
+.theme-transition,
+.theme-transition *,
+.theme-transition *:before,
+.theme-transition *:after {
+  transition:
+    background-color 300ms ease-in-out,
+    border-color 300ms ease-in-out,
+    color 300ms ease-in-out,
+    fill 300ms ease-in-out,
+    stroke 300ms ease-in-out,
+    box-shadow 300ms ease-in-out !important;
+}
+
+/* Variantes de modo oscuro/claro para Tailwind CSS v4 */
+@variant dark (.dark &);
+@variant light (.light &);
