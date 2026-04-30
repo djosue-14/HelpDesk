@@ -26,7 +26,7 @@ export default function KpiCard({ icon, label, value, delta, deltaTone, hint, ic
         </span>
         {delta && (
           <span className={`flex items-center gap-0.5 text-xs font-bold px-2 py-1 rounded ${
-            deltaTone === 'up' ? 'text-green-700 bg-green-50' : deltaTone === 'down' ? 'text-red-700 bg-red-50' : 'text-slate-600 dark:text-dark-on-surface-variant bg-slate-100 dark:bg-dark-surface-container-high'
+            deltaTone === 'up' ? 'text-green-700 bg-green-50 dark:text-green-400 dark:bg-green-900/20' : deltaTone === 'down' ? 'text-red-700 bg-red-50 dark:text-red-400 dark:bg-red-900/20' : 'text-slate-600 dark:text-dark-on-surface-variant bg-slate-100 dark:bg-dark-surface-container-high'
           }`}>
             {deltaTone === 'up'   && <Icon name="trending_up"   size={13} />}
             {deltaTone === 'down' && <Icon name="trending_down" size={13} />}

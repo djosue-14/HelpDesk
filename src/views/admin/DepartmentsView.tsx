@@ -65,7 +65,7 @@ export default function CatalogDepartments() {
                   <td className="px-5 py-4 text-on-surface-variant">{d.coordinatorUserId ?? '—'}</td>
                   <td className="px-5 py-4">
                     <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${
-                      d.isEnabled ? 'bg-green-100 text-green-700' : 'bg-slate-100 dark:bg-dark-surface-container-high text-slate-600 dark:text-dark-on-surface-variant'
+                      d.isEnabled ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-slate-100 dark:bg-dark-surface-container-high text-slate-600 dark:text-dark-on-surface-variant'
                     }`}>
                       {d.isEnabled ? 'Activo' : 'Inactivo'}
                     </span>

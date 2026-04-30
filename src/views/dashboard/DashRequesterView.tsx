@@ -157,7 +157,7 @@ export default function DashRequester({ role, onCreate }: Props) {
           <div className="space-y-2">
             {(score?.scoreTransactions ?? []).slice(0, 3).map(tx => (
               <div key={tx.scoreTransactionId} className="flex items-center gap-2 text-xs">
-                <span className="text-green-600 font-bold shrink-0">+{tx.points}</span>
+                <span className="text-green-600 dark:text-green-400 font-bold shrink-0">+{tx.points}</span>
                 <span className="flex-1 text-on-surface-variant truncate">{tx.reason}</span>
               </div>
             ))}

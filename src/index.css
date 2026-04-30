@@ -23,3 +23,58 @@ body {
 /* Variantes de modo oscuro/claro para Tailwind CSS v4 */
 @variant dark (.dark &);
 @variant light (.light &);
+
+/*
+ * Remapeo de tokens MD3 base en modo oscuro.
+ * Permite que text-on-surface, bg-surface-container, text-primary, etc.
+ * funcionen correctamente sin necesidad de dark: en cada elemento.
+ */
+.dark {
+  /* Primary */
+  --color-primary:              var(--color-dark-primary);
+  --color-on-primary:           var(--color-dark-on-primary);
+  --color-primary-container:    var(--color-dark-primary-container);
+  --color-on-primary-container: var(--color-dark-on-primary-container);
+  --color-surface-tint:         var(--color-dark-surface-tint);
+
+  /* Secondary */
+  --color-secondary:              var(--color-dark-secondary);
+  --color-on-secondary:           var(--color-dark-on-secondary);
+  --color-secondary-container:    var(--color-dark-secondary-container);
+  --color-on-secondary-container: var(--color-dark-on-secondary-container);
+
+  /* Tertiary */
+  --color-tertiary:              var(--color-dark-tertiary);
+  --color-on-tertiary:           var(--color-dark-on-tertiary);
+  --color-tertiary-container:    var(--color-dark-tertiary-container);
+  --color-on-tertiary-container: var(--color-dark-on-tertiary-container);
+
+  /* Error */
+  --color-error:              var(--color-dark-error);
+  --color-on-error:           var(--color-dark-on-error);
+  --color-error-container:    var(--color-dark-error-container);
+  --color-on-error-container: var(--color-dark-on-error-container);
+
+  /* Background & Surface */
+  --color-background:    var(--color-dark-background);
+  --color-on-background: var(--color-dark-on-background);
+  --color-surface:       var(--color-dark-surface);
+  --color-on-surface:    var(--color-dark-on-surface);
+
+  /* Surface variant */
+  --color-surface-variant:    var(--color-dark-surface-variant);
+  --color-on-surface-variant: var(--color-dark-on-surface-variant);
+
+  /* Outline */
+  --color-outline:         var(--color-dark-outline);
+  --color-outline-variant: var(--color-dark-outline-variant);
+
+  /* Surface containers */
+  --color-surface-dim:                var(--color-dark-surface-dim);
+  --color-surface-bright:             var(--color-dark-surface-bright);
+  --color-surface-container-lowest:   var(--color-dark-surface-container-lowest);
+  --color-surface-container-low:      var(--color-dark-surface-container-low);
+  --color-surface-container:          var(--color-dark-surface-container);
+  --color-surface-container-high:     var(--color-dark-surface-container-high);
+  --color-surface-container-highest:  var(--color-dark-surface-container-highest);
+}

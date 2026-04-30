@@ -66,7 +66,7 @@ export default function AssignmentsView() {
                     </div>
                   </td>
                   <td className="px-5 py-4">
-                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-violet-100 text-violet-700">Disponible</span>
+                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400">Disponible</span>
                   </td>
                   <td className="px-5 py-4 min-w-[140px]">
                     <p className="text-xs text-on-surface-variant mb-1">Carga {load}%</p>

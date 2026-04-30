@@ -214,9 +214,9 @@ export default function TicketDetail({ role }: Props) {
                         isInternal ? 'bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/40' : 'bg-surface-container-low dark:bg-dark-surface-container-low border border-slate-100 dark:border-dark-outline-variant/50'
                       }`}>
                         <div className="flex items-center gap-2 mb-2 flex-wrap">
-                          {isInternal && <Icon name="lock" size={14} className="text-amber-600" />}
+                          {isInternal && <Icon name="lock" size={14} className="text-amber-600 dark:text-amber-400" />}
                           <span className="text-sm font-semibold text-on-surface">{author?.name ?? c.authorId}</span>
-                          {isInternal && <span className="text-xs font-bold text-amber-700">· Nota interna</span>}
+                          {isInternal && <span className="text-xs font-bold text-amber-700 dark:text-amber-400">· Nota interna</span>}
                           <span className="ml-auto text-xs text-on-surface-variant">{formatDate(c.createdAt)}</span>
                         </div>
                         <p className="text-sm text-on-surface leading-relaxed">{c.content}</p>

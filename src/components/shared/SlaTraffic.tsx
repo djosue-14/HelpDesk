@@ -8,10 +8,10 @@ const DOT: Record<SlaState, string> = {
 }
 
 const TEXT: Record<SlaState, string> = {
-  green:  'text-green-700',
-  yellow: 'text-amber-700',
-  red:    'text-red-700',
-  paused: 'text-slate-500',
+  green:  'text-green-700 dark:text-green-400',
+  yellow: 'text-amber-700 dark:text-amber-400',
+  red:    'text-red-700 dark:text-red-400',
+  paused: 'text-slate-500 dark:text-slate-400',
 }
 
 interface SlaTrafficProps {

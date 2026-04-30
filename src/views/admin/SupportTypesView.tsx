@@ -61,7 +61,7 @@ export default function CatalogTypes() {
                 <td className="px-5 py-4 font-semibold text-on-surface">{t.name}</td>
                 <td className="px-5 py-4">
                   <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${
-                    t.isEnabled ? 'bg-green-100 text-green-700' : 'bg-slate-100 dark:bg-dark-surface-container-high text-slate-600 dark:text-dark-on-surface-variant'
+                    t.isEnabled ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-slate-100 dark:bg-dark-surface-container-high text-slate-600 dark:text-dark-on-surface-variant'
                   }`}>
                     {t.isEnabled ? 'Activo' : 'Inactivo'}
                   </span>

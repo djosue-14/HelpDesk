@@ -70,12 +70,12 @@ export default function HeatmapView() {
         <h3 className="text-base font-semibold text-on-surface mb-4">Insights rápidos</h3>
         <ul className="space-y-3">
           {[
-            { icon: 'trending_up',  color: '#0E5C25', text: <span><strong>Tecnología · Soporte</strong> concentra el 22% de los tickets activos. Considera reforzar el equipo en horas pico.</span> },
-            { icon: 'warning',      color: '#93000A', text: <span><strong>Operaciones · Incidencias</strong> tiene 19 tickets críticos abiertos — segundo foco en volumen.</span> },
-            { icon: 'auto_awesome', color: 'var(--color-primary)', text: <span>Recursos Humanos atiende mayoría de <em>consultas</em>: candidato natural a base de conocimiento.</span> },
+            { icon: 'trending_up',  cls: 'text-green-700 dark:text-green-400', text: <span><strong>Tecnología · Soporte</strong> concentra el 22% de los tickets activos. Considera reforzar el equipo en horas pico.</span> },
+            { icon: 'warning',      cls: 'text-red-700 dark:text-red-400',     text: <span><strong>Operaciones · Incidencias</strong> tiene 19 tickets críticos abiertos — segundo foco en volumen.</span> },
+            { icon: 'auto_awesome', cls: 'text-primary',                        text: <span>Recursos Humanos atiende mayoría de <em>consultas</em>: candidato natural a base de conocimiento.</span> },
           ].map((item, i) => (
             <li key={i} className="flex items-start gap-3 text-sm text-on-surface">
-              <Icon name={item.icon} size={18} style={{ color: item.color }} className="shrink-0 mt-0.5" />
+              <Icon name={item.icon} size={18} className={`shrink-0 mt-0.5 ${item.cls}`} />
               {item.text}
             </li>
           ))}

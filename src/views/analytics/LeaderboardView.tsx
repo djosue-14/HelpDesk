@@ -7,14 +7,14 @@ import Avatar from '@/components/shared/Avatar'
 import { Stars } from '@/components/shared/Stars'
 
 const MEDAL = (r: number) =>
-  r === 1 ? 'bg-amber-100 text-amber-600 border-amber-300' :
-  r === 2 ? 'bg-slate-100 text-slate-500 border-slate-300' :
-            'bg-orange-100 text-orange-600 border-orange-300'
+  r === 1 ? 'bg-amber-100 text-amber-600 border-amber-300 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-700/50' :
+  r === 2 ? 'bg-slate-100 text-slate-500 border-slate-300 dark:bg-slate-700/50 dark:text-slate-400 dark:border-slate-600/50' :
+            'bg-orange-100 text-orange-600 border-orange-300 dark:bg-orange-900/30 dark:text-orange-400 dark:border-orange-700/50'
 
 const GRAD = (r: number) =>
-  r === 1 ? 'from-amber-50 to-white' :
-  r === 2 ? 'from-slate-50 to-white' :
-            'from-orange-50 to-white'
+  r === 1 ? 'from-amber-50 to-white dark:from-amber-900/20 dark:to-transparent' :
+  r === 2 ? 'from-slate-50 to-white dark:from-slate-800/50 dark:to-transparent' :
+            'from-orange-50 to-white dark:from-orange-900/20 dark:to-transparent'
 
 export default function LeaderboardView() {
   const [period, setPeriod] = useState('month')

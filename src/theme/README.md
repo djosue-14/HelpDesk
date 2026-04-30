@@ -25,12 +25,12 @@ Archivos de tema anteriores renombrados automáticamente
 Para cambiar el tema del proyecto:
 
 1. **Pegar nuevo tema**: Sustituir `material-theme.json` con el nuevo archivo
-2. **Regenerar CSS**: Ejecutar `npm run theme:generate` o `yarn theme:generate`
+2. **Regenerar CSS**: Ejecutar `yarn run theme:generate` o `yarn theme:generate`
 3. **Los componentes heredan automáticamente** el nuevo tema
 
 ```bash
 # Regenerar colores desde material-theme.json
-npm run theme:generate
+yarn run theme:generate
 ```
 
 ## 📊 Colores Disponibles
@@ -61,5 +61,5 @@ Todos los colores con prefijo `dark:bg-*` y `dark:text-*`
 2. Configurar colores seed
 3. Exportar como JSON
 4. Reemplazar `src/theme/material-theme.json`  
-5. Ejecutar `npm run theme:generate`
+5. Ejecutar `yarn run theme:generate`
 6. ¡Los componentes se actualizan automáticamente! ✨

@@ -27,7 +27,7 @@ export default function ThemeToggle({ theme, onThemeChange }: ThemeToggleProps) 
               'flex-1 flex items-center justify-center p-2 rounded-lg transition-all duration-200',
               active
                 ? 'bg-white dark:bg-dark-secondary-container shadow-sm text-primary dark:text-dark-on-secondary-container'
-                : 'text-slate-400 dark:text-dark-on-surface-variant hover:bg-white/60 dark:hover:bg-dark-surface-container-highest hover:text-slate-600',
+                : 'text-slate-400 dark:text-dark-on-surface-variant hover:bg-white/60 dark:hover:bg-dark-surface-container-highest hover:text-slate-600 dark:hover:text-dark-on-surface',
             ].join(' ')}
           >
             <Icon name={opt.icon} size={18} />
