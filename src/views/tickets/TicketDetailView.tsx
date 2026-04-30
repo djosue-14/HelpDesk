@@ -183,7 +183,7 @@ export default function TicketDetail({ role }: Props) {
         <div className="grid gap-6" style={{ gridTemplateColumns: '1fr 300px' }}>
           {/* Left: tabs + content */}
           <div className="space-y-4">
-            <div className="flex border-b border-slate-200">
+            <div className="flex border-b border-slate-200 dark:border-dark-outline-variant">
               {([
                 ['thread', 'forum', `Conversación (${allComments.length})`],
                 ['history', 'history', 'Historial'],
@@ -192,8 +192,8 @@ export default function TicketDetail({ role }: Props) {
                 <button key={id} onClick={() => setTab(id)}
                   className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
                     tab === id
-                      ? 'border-primary text-primary'
-                      : 'border-transparent text-slate-500 hover:text-on-surface'
+                      ? 'border-primary dark:border-dark-primary text-primary dark:text-dark-primary'
+                      : 'border-transparent text-slate-500 dark:text-dark-on-surface-variant hover:text-on-surface dark:hover:text-dark-on-surface'
                   }`}>
                   <Icon name={icon} size={16} />
                   {label}
@@ -211,7 +211,7 @@ export default function TicketDetail({ role }: Props) {
                     <div key={c.ticketCommentId} className={`flex gap-3 ${isInternal ? 'opacity-90' : ''}`}>
                       <Avatar user={author} size="md" />
                       <div className={`flex-1 min-w-0 rounded-xl p-4 ${
-                        isInternal ? 'bg-amber-50 border border-amber-200' : 'bg-surface-container-low border border-slate-100'
+                        isInternal ? 'bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/40' : 'bg-surface-container-low dark:bg-dark-surface-container-low border border-slate-100 dark:border-dark-outline-variant/50'
                       }`}>
                         <div className="flex items-center gap-2 mb-2 flex-wrap">
                           {isInternal && <Icon name="lock" size={14} className="text-amber-600" />}
@@ -231,15 +231,15 @@ export default function TicketDetail({ role }: Props) {
 
                 {/* Composer */}
                 {ticket.status !== 'Closed' && (
-                  <div className={`rounded-xl border p-4 ${internal ? 'border-amber-300 bg-amber-50' : 'border-slate-200 bg-white'}`}>
+                  <div className={`rounded-xl border p-4 ${internal ? 'border-amber-300 dark:border-amber-700/40 bg-amber-50 dark:bg-amber-900/20' : 'border-slate-200 dark:border-dark-outline-variant bg-white dark:bg-dark-surface-container'}`}>
                     <textarea
                       className="w-full bg-transparent text-sm text-on-surface placeholder:text-slate-400 resize-none outline-none min-h-[80px]"
                       placeholder={internal ? 'Escribe una nota visible solo para agentes…' : 'Escribe una respuesta…'}
                       value={composer}
                       onChange={e => setComposer(e.target.value)}
                     />
-                    <div className="flex items-center gap-2 mt-3 pt-3 border-t border-slate-200">
-                      <button className="p-1.5 text-slate-400 hover:text-primary rounded transition-colors" title="Adjuntar">
+                    <div className="flex items-center gap-2 mt-3 pt-3 border-t border-slate-200 dark:border-dark-outline-variant">
+                      <button className="p-1.5 text-slate-400 dark:text-dark-on-surface-variant hover:text-primary dark:hover:text-dark-primary rounded transition-colors" title="Adjuntar">
                         <Icon name="attach_file" size={18} />
                       </button>
                       {isAgent && (
@@ -269,7 +269,7 @@ export default function TicketDetail({ role }: Props) {
                         <span className="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center shrink-0">
                           <Icon name={h.icon} size={15} className="text-primary" />
                         </span>
-                        {i < history.length - 1 && <span className="flex-1 w-px bg-slate-200 mt-1" />}
+                        {i < history.length - 1 && <span className="flex-1 w-px bg-slate-200 dark:bg-dark-outline-variant mt-1" />}
                       </div>
                       <div className="flex-1 pb-3">
                         <p className="text-sm text-on-surface">{h.text}</p>
@@ -286,7 +286,7 @@ export default function TicketDetail({ role }: Props) {
                 {!ticket.attachments || ticket.attachments.length === 0
                   ? <Card><p className="text-sm text-center text-on-surface-variant py-6">Sin archivos adjuntos.</p></Card>
                   : ticket.attachments.map(a => (
-                    <div key={a.ticketAttachmentId} className="flex items-center gap-3 p-4 rounded-xl border border-slate-200 bg-white">
+                    <div key={a.ticketAttachmentId} className="flex items-center gap-3 p-4 rounded-xl border border-slate-200 dark:border-dark-outline-variant bg-white dark:bg-dark-surface-container">
                       <Icon name={getFileIcon(a.fileExtension)} size={20} className="text-primary" />
                       <span className="flex-1 text-sm font-medium text-on-surface">{a.originalFileName}</span>
                       <span className="text-xs text-on-surface-variant">{formatBytes(a.fileSizeBytes)}</span>
@@ -344,8 +344,8 @@ export default function TicketDetail({ role }: Props) {
                     <button key={p.id}
                       className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                         ticket.priority === p.id
-                          ? 'bg-primary text-white'
-                          : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high'
+                          ? 'bg-primary dark:bg-dark-primary text-white dark:text-dark-on-primary'
+                          : 'bg-surface-container dark:bg-dark-surface-container text-on-surface-variant dark:text-dark-on-surface-variant hover:bg-surface-container-high dark:hover:bg-dark-surface-container-high'
                       }`}>
                       {p.name}
                     </button>

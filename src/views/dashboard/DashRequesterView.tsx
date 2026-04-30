@@ -44,7 +44,7 @@ function MyTicketRow({ t }: { t: TicketSummaryDto }) {
   return (
     <div
       onClick={() => navigate(`/tickets/${t.ticketId}`)}
-      className="grid gap-4 items-center p-4 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-primary/30 hover:shadow-sm transition-all"
+      className="grid gap-4 items-center p-4 bg-white dark:bg-dark-surface-container border border-slate-200 dark:border-dark-outline-variant rounded-xl cursor-pointer hover:border-primary/30 dark:hover:border-dark-primary/30 hover:shadow-sm transition-all"
       style={{ gridTemplateColumns: '130px 1fr auto auto' }}
     >
       <div className="flex flex-col gap-1">
@@ -145,7 +145,7 @@ export default function DashRequester({ role, onCreate }: Props) {
       <div className="grid grid-cols-2 gap-6">
         <Card>
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center bg-purple-100 text-purple-600">
+            <div className="w-10 h-10 rounded-full flex items-center justify-center bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-300">
               <Icon name="workspace_premium" size={22} fill={1} />
             </div>
             <div>

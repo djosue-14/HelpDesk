@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Routes, Route, Navigate, useNavigate } from 'react-router'
 import { useAuthContext } from '@hooks/useAuthContext'
+import { useRouteContext } from '@hooks/useRouteContext'
 import { USE_MOCK } from '@config'
 import { getMockTokenForRole } from '@services/auth.service'
 import AppShell from '@/components/layout/AppShell'
@@ -27,6 +28,7 @@ function deriveRole(authRole: string | undefined): Role {
 
 export default function App() {
   const { user, login } = useAuthContext()
+  const { routes } = useRouteContext()
   const navigate = useNavigate()
   const [showCreate, setShowCreate] = useState(false)
 
@@ -38,6 +40,24 @@ export default function App() {
       login(token)
     }
     navigate('/')
+  }
+
+  type ViewFactory = (role: Role) => React.ReactNode
+
+  const VIEW_MAP: Record<string, ViewFactory> = {
+    '/':                  () => <HomeView onCreateTicket={() => setShowCreate(true)} />,
+    '/tickets':           (r) => <TicketsListView role={r} />,
+    '/tickets/:id':       (r) => <TicketDetailView role={r} />,
+    '/queue':             (r) => <TicketsListView role={r} scope="queue" />,
+    '/score':             () => <LeaderboardView />,
+    '/leaderboard':       () => <LeaderboardView />,
+    '/metrics':           () => <MetricsView />,
+    '/heatmap':           () => <HeatmapView />,
+    '/agents':            () => <AgentsPerformanceView />,
+    '/admin/departments': () => <DepartmentsView />,
+    '/admin/types':       () => <SupportTypesView />,
+    '/admin/assignments': () => <AssignmentsView />,
+    '/admin/sla':         () => <SlaConfigView />,
   }
 
   const shell = (
@@ -54,22 +74,21 @@ export default function App() {
         <Route path="/login" element={<LoginView />} />
         <Route element={<AuthMiddleware />}>
           <Route element={shell}>
+            {(routes ?? []).map(route => {
+              const factory = VIEW_MAP[route.path]
+              if (!factory) return null
+              return (
+                <Route
+                  key={route.path}
+                  path={route.path}
+                  element={factory(role)}
+                />
+              )
+            })}
             <Route index element={<HomeView onCreateTicket={() => setShowCreate(true)} />} />
-            <Route path="tickets" element={<TicketsListView role={role} />} />
-            <Route path="tickets/:id" element={<TicketDetailView role={role} />} />
-            <Route path="queue" element={<TicketsListView role={role} scope="queue" />} />
-            <Route path="score" element={<LeaderboardView />} />
-            <Route path="leaderboard" element={<LeaderboardView />} />
-            <Route path="metrics" element={<MetricsView />} />
-            <Route path="heatmap" element={<HeatmapView />} />
-            <Route path="agents" element={<AgentsPerformanceView />} />
-            <Route path="admin/departments" element={<DepartmentsView />} />
-            <Route path="admin/types" element={<SupportTypesView />} />
-            <Route path="admin/assignments" element={<AssignmentsView />} />
-            <Route path="admin/sla" element={<SlaConfigView />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Route>
-        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 
       {showCreate && (

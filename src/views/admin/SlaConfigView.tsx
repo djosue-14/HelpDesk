@@ -39,7 +39,7 @@ export default function SlaConfigView() {
           {slaConfigs.map(cfg => {
             const prio = cfg.priority as TicketPriority
             return (
-              <div key={cfg.slaConfigurationId} className="bg-surface-container rounded-xl p-4 space-y-3">
+              <div key={cfg.slaConfigurationId} className="bg-surface-container dark:bg-dark-surface-container rounded-xl p-4 space-y-3">
                 <PriorityChip id={prio} />
                 {[
                   { label: 'Resp. inicial', value: INITIAL_RESP[prio] ?? '—' },
@@ -47,9 +47,9 @@ export default function SlaConfigView() {
                   { label: 'Umbral ámbar',  value: AMBER_THR[prio] ?? '70%'  },
                 ].map(({ label, value }) => (
                   <div key={label}>
-                    <label className="text-xs font-medium text-on-surface-variant">{label}</label>
+                    <label className="text-xs font-medium text-on-surface-variant dark:text-dark-on-surface-variant">{label}</label>
                     <input
-                      className="mt-1 w-full border border-slate-200 rounded-lg px-3 py-1.5 text-sm text-on-surface focus:outline-none focus:border-primary bg-white"
+                      className="mt-1 w-full border border-slate-200 dark:border-dark-outline-variant rounded-lg px-3 py-1.5 text-sm text-on-surface dark:text-dark-on-surface focus:outline-none focus:border-primary dark:focus:border-dark-primary bg-white dark:bg-dark-surface-container-low"
                       defaultValue={value}
                     />
                   </div>
@@ -78,8 +78,8 @@ export default function SlaConfigView() {
               <input type="checkbox" checked={checked}
                 onChange={e => onChange(e.target.checked)} className="mt-1 accent-primary" />
               <div>
-                <p className="text-sm font-semibold text-on-surface">{title}</p>
-                <p className="text-xs text-on-surface-variant mt-0.5">{desc}</p>
+                <p className="text-sm font-semibold text-on-surface dark:text-dark-on-surface">{title}</p>
+                <p className="text-xs text-on-surface-variant dark:text-dark-on-surface-variant mt-0.5">{desc}</p>
               </div>
             </label>
           ))}
@@ -92,7 +92,7 @@ export default function SlaConfigView() {
           {['1 ene · Año Nuevo','21 mar · Benemérito Juárez','1 may · Trabajo','16 sep · Independencia','20 nov · Revolución','25 dic · Navidad'].map(d => (
             <span key={d} className="px-3 py-1.5 rounded-full text-xs font-medium bg-primary text-white">{d}</span>
           ))}
-          <button className="px-3 py-1.5 rounded-full text-xs font-medium border border-dashed border-outline-variant text-on-surface-variant hover:bg-surface-container">
+          <button className="px-3 py-1.5 rounded-full text-xs font-medium border border-dashed border-outline-variant dark:border-dark-outline-variant text-on-surface-variant dark:text-dark-on-surface-variant hover:bg-surface-container dark:hover:bg-dark-surface-container">
             + Añadir fecha
           </button>
         </div>

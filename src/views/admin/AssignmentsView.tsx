@@ -29,16 +29,16 @@ export default function AssignmentsView() {
         <Button leading="person_add">Asignar agente</Button>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-dark-surface-container rounded-xl border border-slate-100 dark:border-dark-outline-variant shadow-sm overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-slate-100 bg-surface-container-low">
+            <tr className="border-b border-slate-100 dark:border-dark-outline-variant bg-surface-container-low dark:bg-dark-surface-container-low">
               {['Agente','Departamento','Tipos de soporte','Estado','Capacidad',''].map(h => (
-                <th key={h} className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">{h}</th>
+                <th key={h} className="text-left px-5 py-3 text-xs font-semibold text-slate-500 dark:text-dark-on-surface-variant uppercase tracking-wider">{h}</th>
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-50">
+          <tbody className="divide-y divide-slate-50 dark:divide-dark-outline-variant/30">
             {AGENTS.map((k, idx) => {
               const u = HD_PEOPLE[k]
               if (!u) return null
@@ -62,7 +62,7 @@ export default function AssignmentsView() {
                       {deptTypes.map(t => (
                         <span key={t.supportTypeId} className="px-2.5 py-1 rounded-full text-xs font-medium bg-primary text-white">{t.name}</span>
                       ))}
-                      <button className="px-2.5 py-1 rounded-full text-xs font-medium border border-dashed border-outline-variant text-on-surface-variant hover:bg-surface-container">+ Añadir</button>
+                      <button className="px-2.5 py-1 rounded-full text-xs font-medium border border-dashed border-outline-variant dark:border-dark-outline-variant text-on-surface-variant dark:text-dark-on-surface-variant hover:bg-surface-container dark:hover:bg-dark-surface-container">+ Añadir</button>
                     </div>
                   </td>
                   <td className="px-5 py-4">

@@ -11,8 +11,8 @@ interface CardProps {
 }
 
 const VARIANTS: Record<Variant, string> = {
-  outlined: 'bg-white border border-slate-200 rounded-xl p-5',
-  filled:   'bg-surface-container rounded-xl p-5',
+  outlined: 'bg-white dark:bg-dark-surface-container border border-slate-200 dark:border-dark-outline-variant rounded-xl p-5',
+  filled:   'bg-surface-container dark:bg-dark-surface-container rounded-xl p-5',
 }
 
 export default function Card({ variant = 'outlined', children, className = '', style, onClick }: CardProps) {

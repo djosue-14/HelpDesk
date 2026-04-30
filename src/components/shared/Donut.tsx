@@ -20,7 +20,8 @@ export default function Donut({ data, size = 160, thickness = 22, total }: Donut
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
       <circle
         cx={size / 2} cy={size / 2} r={r} fill="none"
-        stroke="var(--color-surface-container-high)" strokeWidth={thickness}
+        className="stroke-surface-container-high dark:stroke-dark-surface-container-high"
+        strokeWidth={thickness}
       />
       {data.map((d, i) => {
         const len = (d.count / sum) * c
@@ -38,11 +39,12 @@ export default function Donut({ data, size = 160, thickness = 22, total }: Donut
         )
       })}
       <text x={size / 2} y={size / 2 - 4} textAnchor="middle"
-        fontSize="22" fontWeight="500" fill="var(--color-on-surface)"
-        fontFamily="Inter">{sum}</text>
+        fontSize="22" fontWeight="500" fontFamily="Inter"
+        className="fill-on-surface dark:fill-dark-on-surface">{sum}</text>
       <text x={size / 2} y={size / 2 + 18} textAnchor="middle"
-        fontSize="11" fill="var(--color-on-surface-variant)"
-        fontFamily="Inter" style={{ textTransform: 'uppercase', letterSpacing: 1 }}>tickets</text>
+        fontSize="11" fontFamily="Inter"
+        className="fill-on-surface-variant dark:fill-dark-on-surface-variant"
+        style={{ textTransform: 'uppercase', letterSpacing: 1 }}>tickets</text>
     </svg>
   )
 }

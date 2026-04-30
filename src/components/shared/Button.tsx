@@ -18,10 +18,10 @@ interface ButtonProps {
 const BASE = 'inline-flex items-center gap-1.5 font-medium rounded-lg transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed'
 
 const VARIANTS: Record<Variant, string> = {
-  filled:   'bg-primary text-white hover:opacity-90 px-4 py-2 text-sm',
-  outlined: 'border border-primary text-primary hover:bg-primary/5 px-4 py-2 text-sm',
-  text:     'text-primary hover:bg-primary/5 px-3 py-2 text-sm',
-  tonal:    'bg-secondary-container text-on-secondary-container hover:bg-secondary-container/80 px-4 py-2 text-sm',
+  filled:   'bg-primary dark:bg-dark-primary text-white dark:text-dark-on-primary hover:opacity-90 px-4 py-2 text-sm',
+  outlined: 'border border-primary dark:border-dark-primary text-primary dark:text-dark-primary hover:bg-primary/5 dark:hover:bg-dark-primary/5 px-4 py-2 text-sm',
+  text:     'text-primary dark:text-dark-primary hover:bg-primary/5 dark:hover:bg-dark-primary/5 px-3 py-2 text-sm',
+  tonal:    'bg-secondary-container dark:bg-dark-secondary-container text-on-secondary-container dark:text-dark-on-secondary-container hover:bg-secondary-container/80 dark:hover:bg-dark-secondary-container/80 px-4 py-2 text-sm',
 }
 
 const SM: Record<Variant, string> = {

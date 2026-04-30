@@ -21,16 +21,16 @@ export default function AgentsPerformance() {
         <p className="text-sm text-on-surface-variant mt-1">Carga, productividad y satisfacción del equipo.</p>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-dark-surface-container rounded-xl border border-slate-100 dark:border-dark-outline-variant shadow-sm overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-slate-100 bg-surface-container-low">
+            <tr className="border-b border-slate-100 dark:border-dark-outline-variant bg-surface-container-low dark:bg-dark-surface-container-low">
               {['#', 'Agente', 'Departamento', 'Cerrados (mes)', 'Cumpl. SLA', '⭐ Promedio', 'Puntos'].map(h => (
-                <th key={h} className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">{h}</th>
+                <th key={h} className="text-left px-5 py-3 text-xs font-semibold text-slate-500 dark:text-dark-on-surface-variant uppercase tracking-wider">{h}</th>
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-50">
+          <tbody className="divide-y divide-slate-50 dark:divide-dark-outline-variant/30">
             {isLoading ? (
               <tr><td colSpan={7} className="px-5 py-8 text-center text-sm text-on-surface-variant">Cargando…</td></tr>
             ) : entries.map(entry => {

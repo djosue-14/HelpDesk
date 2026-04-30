@@ -35,16 +35,16 @@ export default function CatalogDepartments() {
         <Button leading="add">Nuevo departamento</Button>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-dark-surface-container rounded-xl border border-slate-100 dark:border-dark-outline-variant shadow-sm overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-slate-100 bg-surface-container-low">
+            <tr className="border-b border-slate-100 dark:border-dark-outline-variant bg-surface-container-low dark:bg-dark-surface-container-low">
               {['ID', 'Nombre', 'Tipos de soporte', 'Coordinador', 'Estado', ''].map(h => (
-                <th key={h} className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">{h}</th>
+                <th key={h} className="text-left px-5 py-3 text-xs font-semibold text-slate-500 dark:text-dark-on-surface-variant uppercase tracking-wider">{h}</th>
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-50">
+          <tbody className="divide-y divide-slate-50 dark:divide-dark-outline-variant/30">
             {isLoading ? (
               <tr><td colSpan={6} className="px-5 py-8 text-center text-sm text-on-surface-variant">Cargando…</td></tr>
             ) : departments.map(d => {
@@ -65,7 +65,7 @@ export default function CatalogDepartments() {
                   <td className="px-5 py-4 text-on-surface-variant">{d.coordinatorUserId ?? '—'}</td>
                   <td className="px-5 py-4">
                     <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${
-                      d.isEnabled ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-600'
+                      d.isEnabled ? 'bg-green-100 text-green-700' : 'bg-slate-100 dark:bg-dark-surface-container-high text-slate-600 dark:text-dark-on-surface-variant'
                     }`}>
                       {d.isEnabled ? 'Activo' : 'Inactivo'}
                     </span>

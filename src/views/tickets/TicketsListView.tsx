@@ -135,11 +135,11 @@ export default function Tickets({ role, query = '', scope = 'all' }: Props) {
             Mostrando {tickets.length} de {counts.all} tickets.
           </p>
         </div>
-        <div className="flex items-center rounded-lg border border-slate-200 overflow-hidden text-sm bg-white">
+        <div className="flex items-center rounded-lg border border-slate-200 dark:border-dark-outline-variant overflow-hidden text-sm bg-white dark:bg-dark-surface-container">
           {([['updated','Más recientes'],['sla','SLA crítico'],['priority','Prioridad']] as [SortKey, string][]).map(([key, label]) => (
             <button key={key} onClick={() => setSort(key)}
               className={`px-4 py-2 font-medium transition-colors ${
-                sort === key ? 'bg-primary text-white' : 'text-slate-600 hover:bg-slate-50'
+                sort === key ? 'bg-primary dark:bg-dark-primary text-white dark:text-dark-on-primary' : 'text-slate-600 dark:text-dark-on-surface-variant hover:bg-slate-50 dark:hover:bg-dark-surface-container-high'
               }`}>
               {label}
             </button>
@@ -148,7 +148,7 @@ export default function Tickets({ role, query = '', scope = 'all' }: Props) {
       </div>
 
       {/* Toolbar */}
-      <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-4 flex flex-wrap items-center gap-2">
+      <div className="bg-white dark:bg-dark-surface-container rounded-xl border border-slate-100 dark:border-dark-outline-variant shadow-sm p-4 flex flex-wrap items-center gap-2">
         <Chip selected={statusF === 'all'} onClick={() => setStatusF('all')}>
           Todos · {counts.all}
         </Chip>
@@ -159,19 +159,19 @@ export default function Tickets({ role, query = '', scope = 'all' }: Props) {
         ))}
         <span className="flex-1" />
         <select
-          className="text-sm border border-slate-200 rounded-lg px-3 py-1.5 bg-white text-on-surface focus:outline-none focus:border-primary"
+          className="text-sm border border-slate-200 dark:border-dark-outline-variant rounded-lg px-3 py-1.5 bg-white dark:bg-dark-surface-container-low text-on-surface dark:text-dark-on-surface focus:outline-none focus:border-primary dark:focus:border-dark-primary"
           value={deptF} onChange={e => setDeptF(e.target.value)}>
           <option value="all">Todos los departamentos</option>
           {depts.map(d => <option key={d} value={d}>{d}</option>)}
         </select>
         <select
-          className="text-sm border border-slate-200 rounded-lg px-3 py-1.5 bg-white text-on-surface focus:outline-none focus:border-primary"
+          className="text-sm border border-slate-200 dark:border-dark-outline-variant rounded-lg px-3 py-1.5 bg-white dark:bg-dark-surface-container-low text-on-surface dark:text-dark-on-surface focus:outline-none focus:border-primary dark:focus:border-dark-primary"
           value={prioF} onChange={e => setPrioF(e.target.value as TicketPriority | 'all')}>
           <option value="all">Todas las prioridades</option>
           {PRIORITIES.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
         </select>
         <select
-          className="text-sm border border-slate-200 rounded-lg px-3 py-1.5 bg-white text-on-surface focus:outline-none focus:border-primary"
+          className="text-sm border border-slate-200 dark:border-dark-outline-variant rounded-lg px-3 py-1.5 bg-white dark:bg-dark-surface-container-low text-on-surface dark:text-dark-on-surface focus:outline-none focus:border-primary dark:focus:border-dark-primary"
           value={slaF} onChange={e => setSlaF(e.target.value)}>
           <option value="all">SLA — Cualquiera</option>
           <option value="green">Verde</option>
@@ -182,19 +182,19 @@ export default function Tickets({ role, query = '', scope = 'all' }: Props) {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-dark-surface-container rounded-xl border border-slate-100 dark:border-dark-outline-variant shadow-sm overflow-hidden">
         {tickets.length === 0 ? (
           <EmptyState icon="search_off" title="Sin resultados" hint="Ajusta los filtros para ver más tickets." />
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-100 bg-surface-container-low">
+              <tr className="border-b border-slate-100 dark:border-dark-outline-variant bg-surface-container-low dark:bg-dark-surface-container-low">
                 {['ID', 'Asunto', 'Estado', 'Prioridad', 'Solicitante', 'Asignado a', 'SLA', 'Vence'].map(h => (
-                  <th key={h} className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">{h}</th>
+                  <th key={h} className="text-left px-5 py-3 text-xs font-semibold text-slate-500 dark:text-dark-on-surface-variant uppercase tracking-wider">{h}</th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-50">
+            <tbody className="divide-y divide-slate-50 dark:divide-dark-outline-variant/30">
               {tickets.map(t => {
                 const req = hdGetPersonByUsername(t.createdBy)
                 const ass = hdGetPersonByUsername(t.assignedAgentUsername)

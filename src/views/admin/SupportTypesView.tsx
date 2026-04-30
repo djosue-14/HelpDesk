@@ -43,16 +43,16 @@ export default function CatalogTypes() {
         ))}
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-dark-surface-container rounded-xl border border-slate-100 dark:border-dark-outline-variant shadow-sm overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-slate-100 bg-surface-container-low">
+            <tr className="border-b border-slate-100 dark:border-dark-outline-variant bg-surface-container-low dark:bg-dark-surface-container-low">
               {['ID', 'Nombre', 'Estado', ''].map(h => (
-                <th key={h} className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">{h}</th>
+                <th key={h} className="text-left px-5 py-3 text-xs font-semibold text-slate-500 dark:text-dark-on-surface-variant uppercase tracking-wider">{h}</th>
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-50">
+          <tbody className="divide-y divide-slate-50 dark:divide-dark-outline-variant/30">
             {types.length === 0 ? (
               <tr><td colSpan={4} className="px-5 py-8 text-center text-sm text-on-surface-variant">Sin tipos para este departamento.</td></tr>
             ) : types.map(t => (
@@ -61,7 +61,7 @@ export default function CatalogTypes() {
                 <td className="px-5 py-4 font-semibold text-on-surface">{t.name}</td>
                 <td className="px-5 py-4">
                   <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${
-                    t.isEnabled ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-600'
+                    t.isEnabled ? 'bg-green-100 text-green-700' : 'bg-slate-100 dark:bg-dark-surface-container-high text-slate-600 dark:text-dark-on-surface-variant'
                   }`}>
                     {t.isEnabled ? 'Activo' : 'Inactivo'}
                   </span>

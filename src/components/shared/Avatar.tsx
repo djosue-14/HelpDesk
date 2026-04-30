@@ -15,7 +15,7 @@ const SIZE: Record<string, string> = {
 export default function Avatar({ user, size = 'md' }: AvatarProps) {
   if (!user) {
     return (
-      <span className={`${SIZE[size]} rounded-full bg-surface-container flex items-center justify-center font-bold text-on-surface-variant`}>
+      <span className={`${SIZE[size]} rounded-full bg-surface-container dark:bg-dark-surface-container flex items-center justify-center font-bold text-on-surface-variant dark:text-dark-on-surface-variant`}>
         —
       </span>
     )

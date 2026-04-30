@@ -12,7 +12,7 @@ export function Stars({ value, size = 18, dim }: StarsProps) {
     <span className={`inline-flex items-center gap-0.5 ${dim ? 'opacity-40' : ''}`}>
       {[1, 2, 3, 4, 5].map(i => (
         <Icon key={i} name="star" size={size} fill={i <= value ? 1 : 0}
-          className={i <= value ? 'text-amber-400' : 'text-slate-300'} />
+          className={i <= value ? 'text-amber-400' : 'text-slate-300 dark:text-dark-on-surface-variant/40'} />
       ))}
     </span>
   )
@@ -35,7 +35,7 @@ export function StarsInput({ value, onChange }: StarsInputProps) {
           onClick={() => onChange(i)}
         >
           <Icon name="star" size={36} fill={i <= (hover || value) ? 1 : 0}
-            className={i <= (hover || value) ? 'text-amber-400' : 'text-slate-300'} />
+            className={i <= (hover || value) ? 'text-amber-400' : 'text-slate-300 dark:text-dark-on-surface-variant/40'} />
         </button>
       ))}
     </div>

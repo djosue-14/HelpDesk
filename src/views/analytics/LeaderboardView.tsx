@@ -47,10 +47,10 @@ export default function LeaderboardView() {
           <h1 className="text-[32px] leading-10 font-semibold text-on-surface capitalize">Top agentes — {monthLabel}</h1>
           <p className="text-sm text-on-surface-variant mt-1">Puntos = tickets cerrados · cumplimiento SLA · calificación promedio.</p>
         </div>
-        <div className="flex items-center rounded-lg border border-slate-200 overflow-hidden text-sm bg-white">
+        <div className="flex items-center rounded-lg border border-slate-200 dark:border-dark-outline-variant overflow-hidden text-sm bg-white dark:bg-dark-surface-container">
           {[['week','Semana'],['month','Mes'],['quarter','Trimestre']].map(([k,l]) => (
             <button key={k} onClick={() => setPeriod(k)}
-              className={`px-4 py-2 font-medium transition-colors ${period === k ? 'bg-primary text-white' : 'text-slate-600 hover:bg-slate-50'}`}>
+              className={`px-4 py-2 font-medium transition-colors ${period === k ? 'bg-primary dark:bg-dark-primary text-white dark:text-dark-on-primary' : 'text-slate-600 dark:text-dark-on-surface-variant hover:bg-slate-50 dark:hover:bg-dark-surface-container-high'}`}>
               {l}
             </button>
           ))}
@@ -85,13 +85,13 @@ export default function LeaderboardView() {
       </div>
 
       {/* Rest table */}
-      <div className="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-dark-surface-container rounded-xl border border-slate-100 dark:border-dark-outline-variant shadow-sm overflow-hidden">
         {rest.map(entry => {
           const person = hdGetPersonByUsername(entry.userId)
           const avgRating = entry.ratingRatePct / 20
           return (
-            <div key={entry.rank} className="flex items-center gap-4 px-6 py-4 border-b border-slate-50 last:border-0 hover:bg-surface-container-low transition-colors">
-              <span className="w-8 text-base font-bold text-slate-400 text-center">{entry.rank}</span>
+            <div key={entry.rank} className="flex items-center gap-4 px-6 py-4 border-b border-slate-50 dark:border-dark-outline-variant/30 last:border-0 hover:bg-surface-container-low dark:hover:bg-dark-surface-container-low transition-colors">
+              <span className="w-8 text-base font-bold text-slate-400 dark:text-dark-on-surface-variant text-center">{entry.rank}</span>
               <div className="flex items-center gap-3 flex-1 min-w-0">
                 <Avatar user={person ?? undefined} size="md" />
                 <div>

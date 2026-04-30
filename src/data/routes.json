@@ -1,0 +1,36 @@
+{
+  "requester": [
+    { "path": "/",          "label": "Mi panel",     "icon": "home",               "section": "Trabajo" },
+    { "path": "/tickets",   "label": "Mis tickets",  "icon": "confirmation_number", "section": "Trabajo", "badge": 4 },
+    { "path": "/tickets/:id","label": "Detalle de ticket", "icon": "confirmation_number" },
+    { "path": "/score",     "label": "Mis puntos",   "icon": "star",               "section": "Reputación" }
+  ],
+  "agent": [
+    { "path": "/",           "label": "Panel",           "icon": "home",               "section": "Bandeja" },
+    { "path": "/tickets",    "label": "Asignados",       "icon": "inbox",              "section": "Bandeja", "badge": 7 },
+    { "path": "/tickets/:id","label": "Detalle de ticket","icon": "inbox" },
+    { "path": "/queue",      "label": "Cola del depto.", "icon": "queue",              "section": "Bandeja", "badge": 12 },
+    { "path": "/leaderboard","label": "Ranking",         "icon": "leaderboard",        "section": "Mi desempeño" },
+    { "path": "/metrics",    "label": "Mis métricas",    "icon": "bar_chart",          "section": "Mi desempeño" }
+  ],
+  "coordinator": [
+    { "path": "/",           "label": "Panel",             "icon": "home",               "section": "Operación" },
+    { "path": "/tickets",    "label": "Todos los tickets", "icon": "confirmation_number","section": "Operación", "badge": 49 },
+    { "path": "/tickets/:id","label": "Detalle de ticket", "icon": "confirmation_number" },
+    { "path": "/metrics",    "label": "Métricas",          "icon": "bar_chart",          "section": "Operación" },
+    { "path": "/heatmap",    "label": "Mapa de calor",     "icon": "grid_view",          "section": "Operación" },
+    { "path": "/agents",     "label": "Rendimiento",       "icon": "groups",             "section": "Equipo" },
+    { "path": "/leaderboard","label": "Ranking",           "icon": "leaderboard",        "section": "Equipo" }
+  ],
+  "admin": [
+    { "path": "/",                  "label": "Panel",             "icon": "home",               "section": "Operación" },
+    { "path": "/tickets",           "label": "Todos los tickets", "icon": "confirmation_number","section": "Operación", "badge": 301 },
+    { "path": "/tickets/:id",       "label": "Detalle de ticket", "icon": "confirmation_number" },
+    { "path": "/metrics",           "label": "Métricas",          "icon": "bar_chart",          "section": "Operación" },
+    { "path": "/heatmap",           "label": "Mapa de calor",     "icon": "grid_view",          "section": "Operación" },
+    { "path": "/admin/departments", "label": "Departamentos",     "icon": "corporate_fare",     "section": "Catálogos" },
+    { "path": "/admin/types",       "label": "Tipos de soporte",  "icon": "category",           "section": "Catálogos" },
+    { "path": "/admin/assignments", "label": "Asignaciones",      "icon": "group",              "section": "Catálogos" },
+    { "path": "/admin/sla",         "label": "Config SLA",        "icon": "timer",              "section": "Catálogos" }
+  ]
+}

@@ -19,7 +19,7 @@ function Scrim({ onClose, children, wide }: { onClose: () => void; children: Rea
     <div className="fixed inset-0 z-50 flex items-center justify-center" onClick={onClose}>
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
       <div
-        className={`relative bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden ${wide ? 'w-[720px]' : 'w-[480px]'} max-h-[90vh]`}
+        className={`relative bg-white dark:bg-dark-surface-container rounded-2xl shadow-2xl flex flex-col overflow-hidden ${wide ? 'w-[720px]' : 'w-[480px]'} max-h-[90vh]`}
         onClick={e => e.stopPropagation()}
       >
         {children}
@@ -30,10 +30,10 @@ function Scrim({ onClose, children, wide }: { onClose: () => void; children: Rea
 
 function DialogHead({ icon, title, onClose }: { icon: string; title: string; onClose: () => void }) {
   return (
-    <div className="flex items-center gap-3 px-6 py-4 border-b border-slate-100">
-      <Icon name={icon} size={22} className="text-primary" />
-      <h3 className="text-base font-semibold text-on-surface flex-1">{title}</h3>
-      <button onClick={onClose} className="p-1 text-slate-400 hover:text-on-surface rounded transition-colors">
+    <div className="flex items-center gap-3 px-6 py-4 border-b border-slate-100 dark:border-dark-outline-variant">
+      <Icon name={icon} size={22} className="text-primary dark:text-dark-primary" />
+      <h3 className="text-base font-semibold text-on-surface dark:text-dark-on-surface flex-1">{title}</h3>
+      <button onClick={onClose} className="p-1 text-slate-400 dark:text-dark-on-surface-variant hover:text-on-surface dark:hover:text-dark-on-surface rounded transition-colors">
         <Icon name="close" size={20} />
       </button>
     </div>
@@ -45,13 +45,13 @@ function DialogBody({ children }: { children: React.ReactNode }) {
 }
 
 function DialogFoot({ children }: { children: React.ReactNode }) {
-  return <div className="flex items-center justify-end gap-2 px-6 py-4 border-t border-slate-100">{children}</div>
+  return <div className="flex items-center justify-end gap-2 px-6 py-4 border-t border-slate-100 dark:border-dark-outline-variant">{children}</div>
 }
 
 function Field({ label, required, helper, children }: { label: string; required?: boolean; helper?: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-xs font-semibold text-on-surface-variant">
+      <label className="text-xs font-semibold text-on-surface-variant dark:text-dark-on-surface-variant">
         {label} {required && <span className="text-error">*</span>}
       </label>
       {children}
@@ -60,7 +60,7 @@ function Field({ label, required, helper, children }: { label: string; required?
   )
 }
 
-const inputCls = 'w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary bg-surface-container-low'
+const inputCls = 'w-full border border-slate-200 dark:border-dark-outline-variant rounded-lg px-3 py-2 text-sm text-on-surface dark:text-dark-on-surface focus:outline-none focus:border-primary dark:focus:border-dark-primary bg-surface-container-low dark:bg-dark-surface-container-low'
 
 /* ── Create ticket ── */
 export function CreateTicketDialog({ onClose, onCreated }: { onClose: () => void; onCreated: () => void }) {
@@ -146,7 +146,7 @@ export function CreateTicketDialog({ onClose, onCreated }: { onClose: () => void
               <button key={p.id} type="button"
                 onClick={() => setPriority(p.id)}
                 className={`flex flex-col items-center gap-0.5 p-3 rounded-xl border-2 text-xs font-semibold transition-colors ${
-                  priority === p.id ? 'border-primary bg-primary/5 text-primary' : 'border-slate-200 text-on-surface-variant hover:border-slate-300'
+                  priority === p.id ? 'border-primary dark:border-dark-primary bg-primary/5 dark:bg-dark-primary/5 text-primary dark:text-dark-primary' : 'border-slate-200 dark:border-dark-outline-variant text-on-surface-variant dark:text-dark-on-surface-variant hover:border-slate-300 dark:hover:border-dark-outline-variant'
                 }`}>
                 <span>{p.name}</span>
                 <span className="font-normal opacity-70">SLA {p.sla}</span>
@@ -156,12 +156,12 @@ export function CreateTicketDialog({ onClose, onCreated }: { onClose: () => void
         </Field>
 
         <Field label="Archivos adjuntos">
-          <div className="border-2 border-dashed border-slate-200 rounded-xl p-6 text-center hover:border-primary/40 transition-colors cursor-pointer">
-            <Icon name="cloud_upload" size={28} className="text-slate-400 mx-auto mb-2" />
-            <p className="text-sm text-on-surface">
-              <span className="text-primary font-semibold">Selecciona</span> o arrastra archivos aquí
+          <div className="border-2 border-dashed border-slate-200 dark:border-dark-outline-variant rounded-xl p-6 text-center hover:border-primary/40 dark:hover:border-dark-primary/40 transition-colors cursor-pointer">
+            <Icon name="cloud_upload" size={28} className="text-slate-400 dark:text-dark-on-surface-variant mx-auto mb-2" />
+            <p className="text-sm text-on-surface dark:text-dark-on-surface">
+              <span className="text-primary dark:text-dark-primary font-semibold">Selecciona</span> o arrastra archivos aquí
             </p>
-            <p className="text-xs text-on-surface-variant mt-1">PNG, JPG, PDF, ZIP · Hasta 10 MB cada uno</p>
+            <p className="text-xs text-on-surface-variant dark:text-dark-on-surface-variant mt-1">PNG, JPG, PDF, ZIP · Hasta 10 MB cada uno</p>
           </div>
         </Field>
       </DialogBody>
@@ -212,8 +212,8 @@ export function CloseTicketDialog({ ticketCode, onClose, onConfirm }: { ticketCo
             onChange={e => setResolution(e.target.value)}
             placeholder="Ej. Se actualizó el firmware del dock WD19TBS a la versión 01.00.16; pantalla externa estable." />
         </Field>
-        <div className="flex items-center gap-2 p-3 rounded-lg bg-surface-container text-sm text-on-surface-variant">
-          <Icon name="info" size={16} className="text-primary shrink-0" />
+        <div className="flex items-center gap-2 p-3 rounded-lg bg-surface-container dark:bg-dark-surface-container text-sm text-on-surface-variant dark:text-dark-on-surface-variant">
+          <Icon name="info" size={16} className="text-primary dark:text-dark-primary shrink-0" />
           El solicitante podrá calificar tu atención al cerrar.
         </div>
       </DialogBody>
@@ -314,7 +314,7 @@ export function RateDialog({ ticketCode, onClose, onConfirm }: { ticketCode: str
               <button key={t} type="button"
                 onClick={() => tog(t)}
                 className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-                  picked.includes(t) ? 'bg-primary text-white' : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high'
+                  picked.includes(t) ? 'bg-primary dark:bg-dark-primary text-white dark:text-dark-on-primary' : 'bg-surface-container dark:bg-dark-surface-container text-on-surface-variant dark:text-dark-on-surface-variant hover:bg-surface-container-high dark:hover:bg-dark-surface-container-high'
                 }`}>
                 {t}
               </button>

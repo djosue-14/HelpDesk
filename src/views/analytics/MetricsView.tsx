@@ -121,7 +121,7 @@ export default function MetricsView() {
                 </div>
               ))}
             </div>
-            <div className="grid mt-2 text-[10px] text-slate-400 font-bold"
+            <div className="grid mt-2 text-[10px] text-slate-400 dark:text-dark-on-surface-variant font-bold"
               style={{ gridTemplateColumns: `repeat(${trend.length}, 1fr)` }}>
               {trendLabels.map((l, i) => (
                 <span key={i} className="text-center truncate">{i % 2 === 0 ? l : ''}</span>

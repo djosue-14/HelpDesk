@@ -42,7 +42,7 @@ function TicketRow({ t }: { t: TicketSummaryDto }) {
   return (
     <div
       onClick={() => navigate(`/tickets/${t.ticketId}`)}
-      className="grid gap-4 items-center p-4 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-primary/30 hover:shadow-sm transition-all"
+      className="grid gap-4 items-center p-4 bg-white dark:bg-dark-surface-container border border-slate-200 dark:border-dark-outline-variant rounded-xl cursor-pointer hover:border-primary/30 dark:hover:border-dark-primary/30 hover:shadow-sm transition-all"
       style={{ gridTemplateColumns: '130px 1fr auto auto' }}
     >
       <div className="flex flex-col gap-1">
@@ -158,10 +158,10 @@ export default function DashCoord({ isAdmin }: Props) {
                   </div>
                 ))}
               </div>
-              <div className="grid mt-2 text-[10px] text-slate-400 font-bold uppercase"
+              <div className="grid mt-2 text-[10px] text-slate-400 dark:text-dark-on-surface-variant font-bold uppercase"
                 style={{ gridTemplateColumns: `repeat(${trend.length}, 1fr)` }}>
                 {trendLabels.map((l, i) => (
-                  <span key={i} className="text-center truncate">{i % 2 === 0 ? l : ''}</span>
+                  <span key={i} className="text-center truncate dark:text-dark-on-surface-variant">{i % 2 === 0 ? l : ''}</span>
                 ))}
               </div>
             </>
