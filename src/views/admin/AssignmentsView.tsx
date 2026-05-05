@@ -1,12 +1,25 @@
+import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { departmentService, supportTypeService } from '@api/services'
 import { HD_PEOPLE } from '@/data/seed'
 import Button from '@/components/shared/Button'
 import Avatar from '@/components/shared/Avatar'
 import SlaBar from '@/components/shared/SlaBar'
+import { Table } from '@components/shared/Table'
+import type { ColumnDef } from '@components/shared/Table'
+import type { SupportTypeDto } from '@t/dtos'
 
 const AGENTS = ['alvaro', 'lucia', 'diego', 'carola', 'hector', 'ana']
 const LOADS  = [60, 50, 78, 42, 55, 38]
+
+interface AgentRow {
+  personKey: string
+  name: string
+  username: string
+  dept: string
+  types: SupportTypeDto[]
+  load: number
+}
 
 export default function AssignmentsView() {
   const { data: departments = [] } = useQuery({
@@ -17,6 +30,98 @@ export default function AssignmentsView() {
     queryKey: ['supportTypes'],
     queryFn: () => supportTypeService.getAll().then(r => r.data ?? []),
   })
+
+  const rows = useMemo<AgentRow[]>(() =>
+    AGENTS.flatMap((k, idx) => {
+      const u = HD_PEOPLE[k]
+      if (!u) return []
+      const dept = departments.find(d => d.name === u.dept || d.departmentId === idx + 1)
+      const types = allTypes.filter(t => t.departmentId === dept?.departmentId).slice(0, 3)
+      return [{
+        personKey: k,
+        name: u.name,
+        username: u.username,
+        dept: dept?.name ?? u.dept,
+        types,
+        load: LOADS[idx],
+      }]
+    }),
+  [departments, allTypes])
+
+  const columns = useMemo<ColumnDef<AgentRow>[]>(() => [
+    {
+      id: 'agent',
+      header: 'Agente',
+      cell: ({ row }) => {
+        const u = HD_PEOPLE[row.original.personKey] ?? HD_PEOPLE['alvaro']
+        return (
+          <div className="flex items-center gap-3">
+            <Avatar user={u} size="md" />
+            <div>
+              <p className="font-semibold text-on-surface">{row.original.name}</p>
+              <p className="text-xs text-on-surface-variant">@{row.original.username}</p>
+            </div>
+          </div>
+        )
+      },
+    },
+    {
+      accessorKey: 'dept',
+      header: 'Departamento',
+      cell: ({ getValue }) => (
+        <span className="text-on-surface-variant">{getValue<string>()}</span>
+      ),
+    },
+    {
+      id: 'types',
+      header: 'Tipos de soporte',
+      enableSorting: false,
+      cell: ({ row }) => (
+        <div className="flex flex-wrap gap-1.5">
+          {row.original.types.map(t => (
+            <span key={t.supportTypeId} className="px-2.5 py-1 rounded-full text-xs font-medium bg-primary text-white">
+              {t.name}
+            </span>
+          ))}
+          <button className="px-2.5 py-1 rounded-full text-xs font-medium border border-dashed border-outline-variant text-on-surface-variant hover:bg-surface-container transition-colors">
+            + Añadir
+          </button>
+        </div>
+      ),
+    },
+    {
+      id: 'status',
+      header: 'Estado',
+      enableSorting: false,
+      cell: () => (
+        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400">
+          Disponible
+        </span>
+      ),
+    },
+    {
+      accessorKey: 'load',
+      header: 'Capacidad',
+      cell: ({ getValue }) => {
+        const load = getValue<number>()
+        return (
+          <div className="min-w-[140px]">
+            <p className="text-xs text-on-surface-variant mb-1">Carga {load}%</p>
+            <SlaBar pct={load} state="green" />
+          </div>
+        )
+      },
+    },
+    {
+      id: 'actions',
+      header: '',
+      size: 100,
+      enableSorting: false,
+      cell: () => (
+        <Button variant="text" size="sm" leading="edit">Editar</Button>
+      ),
+    },
+  ], [])
 
   return (
     <div className="space-y-6">
@@ -29,58 +134,13 @@ export default function AssignmentsView() {
         <Button leading="person_add">Asignar agente</Button>
       </div>
 
-      <div className="bg-white dark:bg-dark-surface-container rounded-xl border border-slate-100 dark:border-dark-outline-variant shadow-sm overflow-hidden">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-slate-100 dark:border-dark-outline-variant bg-surface-container-low dark:bg-dark-surface-container-low">
-              {['Agente','Departamento','Tipos de soporte','Estado','Capacidad',''].map(h => (
-                <th key={h} className="text-left px-5 py-3 text-xs font-semibold text-slate-500 dark:text-dark-on-surface-variant uppercase tracking-wider">{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-50 dark:divide-dark-outline-variant/30">
-            {AGENTS.map((k, idx) => {
-              const u = HD_PEOPLE[k]
-              if (!u) return null
-              const dept = departments.find(d => d.name === u.dept || d.departmentId === idx + 1)
-              const deptTypes = allTypes.filter(t => t.departmentId === dept?.departmentId).slice(0, 3)
-              const load = LOADS[idx]
-              return (
-                <tr key={u.id} className="hover:bg-surface-container-low transition-colors">
-                  <td className="px-5 py-4">
-                    <div className="flex items-center gap-3">
-                      <Avatar user={u} size="md" />
-                      <div>
-                        <p className="font-semibold text-on-surface">{u.name}</p>
-                        <p className="text-xs text-on-surface-variant">@{u.username}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-5 py-4 text-on-surface-variant">{dept?.name ?? u.dept}</td>
-                  <td className="px-5 py-4">
-                    <div className="flex flex-wrap gap-1.5">
-                      {deptTypes.map(t => (
-                        <span key={t.supportTypeId} className="px-2.5 py-1 rounded-full text-xs font-medium bg-primary text-white">{t.name}</span>
-                      ))}
-                      <button className="px-2.5 py-1 rounded-full text-xs font-medium border border-dashed border-outline-variant dark:border-dark-outline-variant text-on-surface-variant dark:text-dark-on-surface-variant hover:bg-surface-container dark:hover:bg-dark-surface-container">+ Añadir</button>
-                    </div>
-                  </td>
-                  <td className="px-5 py-4">
-                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400">Disponible</span>
-                  </td>
-                  <td className="px-5 py-4 min-w-[140px]">
-                    <p className="text-xs text-on-surface-variant mb-1">Carga {load}%</p>
-                    <SlaBar pct={load} state="green" />
-                  </td>
-                  <td className="px-5 py-4">
-                    <Button variant="text" size="sm" leading="edit">Editar</Button>
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      </div>
+      <Table<AgentRow>
+        data={rows}
+        columns={columns}
+        emptyMessage="No hay agentes asignados"
+        searchable
+        searchPlaceholder="Buscar agente..."
+      />
     </div>
   )
 }

@@ -51,20 +51,7 @@ export default function MetricsView() {
   )
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-wider text-secondary mb-1">Métricas operativas</p>
-          <h1 className="text-[32px] leading-10 font-semibold text-on-surface">Métricas de la mesa de servicio</h1>
-        </div>
-        <div className="flex items-center gap-3">
-          <Button variant="outlined" leading="calendar_today">Últimos 30 días</Button>
-          <Button variant="outlined" leading="download">Exportar CSV</Button>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-4 gap-5">
-        <KpiCard icon="speed" label="Cumplimiento SLA" value={metrics ? `${metrics.slaCompliancePct.toFixed(1)}%` : '—'}
+    <div className="space-y-8"> <div className="flex items-start justify-between"> <div> <p className="text-xs font-bold uppercase tracking-wider text-secondary mb-1">Métricas operativas</p> <h1 className="text-[32px] leading-10 font-semibold text-on-surface">Métricas de la mesa de servicio</h1> </div> <div className="flex items-center gap-3"> <Button variant="outlined" leading="calendar_today">Últimos 30 días</Button> <Button variant="outlined" leading="download">Exportar CSV</Button> </div> </div> <div className="grid grid-cols-4 gap-5"> <KpiCard icon="speed" label="Cumplimiento SLA" value={metrics ? `${metrics.slaCompliancePct.toFixed(1)}%` : '—'}
           iconBg="#D5F5DD" iconColor="#0E5C25" />
         <KpiCard icon="schedule" label="Tiempo medio resol." value={metrics ? `${metrics.avgResolutionHours.toFixed(1)} h` : '—'} />
         <KpiCard icon="timer" label="Primera respuesta" value={metrics ? `${metrics.avgFirstResponseHours.toFixed(1)} h` : '—'} />
@@ -72,15 +59,11 @@ export default function MetricsView() {
       </div>
 
       {/* Donut charts */}
-      <div className="grid grid-cols-2 gap-6">
-        <Card>
-          <h3 className="text-base font-semibold text-on-surface mb-4">Distribución por estado</h3>
-          <div className="flex items-center gap-6">
+      <div className="grid grid-cols-2 gap-6"> <Card> <h3 className="text-base font-semibold text-on-surface mb-4">Distribución por estado</h3> <div className="flex items-center gap-6">
             <Donut data={statusCounts.map(s => ({ count: s.count, color: s.color }))} size={170} thickness={26} />
             <div className="space-y-2 flex-1">
               {statusCounts.map(s => (
-                <div key={s.id} className="flex items-center gap-2 text-sm">
-                  <span className="w-2.5 h-2.5 rounded-sm shrink-0" style={{ background: s.color }} />
+                <div key={s.id} className="flex items-center gap-2 text-sm"> <span className="w-2.5 h-2.5 rounded-sm shrink-0" style={{ background: s.color }} />
                   <span className="flex-1 text-on-surface-variant">{s.label}</span>
                   <span className="font-semibold text-on-surface">{s.count}</span>
                 </div>
@@ -89,13 +72,11 @@ export default function MetricsView() {
           </div>
         </Card>
         <Card>
-          <h3 className="text-base font-semibold text-on-surface mb-4">Cumplimiento SLA por prioridad</h3>
-          <div className="flex items-center gap-6">
+          <h3 className="text-base font-semibold text-on-surface mb-4">Cumplimiento SLA por prioridad</h3> <div className="flex items-center gap-6">
             <Donut data={priorityEntries.map(p => ({ count: p.count, color: p.color }))} size={170} thickness={26} />
             <div className="space-y-2 flex-1">
               {priorityEntries.map(p => (
-                <div key={p.id} className="flex items-center gap-2 text-sm">
-                  <span className="w-2.5 h-2.5 rounded-sm shrink-0" style={{ background: p.color }} />
+                <div key={p.id} className="flex items-center gap-2 text-sm"> <span className="w-2.5 h-2.5 rounded-sm shrink-0" style={{ background: p.color }} />
                   <span className="flex-1 text-on-surface-variant">{p.label}</span>
                   <span className="font-semibold text-on-surface">{p.count}%</span>
                 </div>
@@ -113,8 +94,7 @@ export default function MetricsView() {
             <div className="flex items-end gap-0.5"
               style={{ height: 200, display: 'grid', gridTemplateColumns: `repeat(${trend.length}, 1fr)` }}>
               {trend.map((d, i) => (
-                <div key={i} className="flex items-end gap-[2px] h-full">
-                  <div className="flex-1 bg-primary rounded-t-sm hover:opacity-80 transition-opacity"
+                <div key={i} className="flex items-end gap-[2px] h-full"> <div className="flex-1 bg-primary rounded-t-sm hover:opacity-80 transition-opacity"
                     style={{ height: `${(d.created / maxVol) * 100}%` }} title={`Creados: ${d.created}`} />
                   <div className="flex-1 bg-tertiary rounded-t-sm hover:opacity-80 transition-opacity"
                     style={{ height: `${(d.closed / maxVol) * 100}%` }} title={`Cerrados: ${d.closed}`} />
@@ -129,13 +109,4 @@ export default function MetricsView() {
             </div>
           </>
         ) : (
-          <div className="h-48 flex items-center justify-center text-sm text-on-surface-variant">Sin datos de tendencia.</div>
-        )}
-        <div className="flex gap-5 mt-3 text-xs text-on-surface-variant">
-          <span className="flex items-center gap-1.5"><span className="w-3 h-2 rounded-sm bg-primary inline-block" />Creados</span>
-          <span className="flex items-center gap-1.5"><span className="w-3 h-2 rounded-sm bg-tertiary inline-block" />Cerrados</span>
-        </div>
-      </Card>
-    </div>
-  )
-}
+          <div className="h-48 flex items-center justify-center text-sm text-on-surface-variant">Sin datos de tendencia.</div> )} <div className="flex gap-5 mt-3 text-xs text-on-surface-variant"> <span className="flex items-center gap-1.5"><span className="w-3 h-2 rounded-sm bg-primary inline-block" />Creados</span> <span className="flex items-center gap-1.5"><span className="w-3 h-2 rounded-sm bg-tertiary inline-block" />Cerrados</span> </div> </Card> </div> )}

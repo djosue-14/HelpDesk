@@ -14,7 +14,7 @@ interface SlaBarProps {
 
 export default function SlaBar({ pct, state }: SlaBarProps) {
   return (
-    <div className="w-full h-1.5 bg-surface-container-high dark:bg-dark-surface-container-high rounded-full overflow-hidden">
+    <div className="w-full h-1.5 bg-surface-container-high rounded-full overflow-hidden">
       <div
         className={`h-full rounded-full transition-all ${FILL[state]}`}
         style={{ width: `${Math.min(100, pct)}%` }}

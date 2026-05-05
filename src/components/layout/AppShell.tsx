@@ -11,14 +11,6 @@ interface AppShellProps {
 
 export default function AppShell({ role, onRoleChange, onCreateTicket }: AppShellProps) {
   return (
-    <div className="bg-surface dark:bg-dark-surface text-on-surface dark:text-dark-on-surface h-screen overflow-hidden flex">
-      <SideNav />
-      <main className="flex-1 h-full overflow-y-auto relative">
+    <div className="bg-surface text-on-surface h-screen overflow-hidden flex"> <SideNav /> <main className="flex-1 h-full overflow-y-auto relative">
         <TopBar role={role} onRoleChange={onRoleChange} onCreateTicket={onCreateTicket} />
-        <div className="p-8 bg-surface dark:bg-dark-surface min-h-full">
-          <Outlet />
-        </div>
-      </main>
-    </div>
-  )
-}
+        <div className="p-8 bg-surface min-h-full"> <Outlet /> </div> </main> </div> )}

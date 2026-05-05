@@ -42,15 +42,13 @@ function TicketRow({ t }: { t: TicketSummaryDto }) {
   return (
     <div
       onClick={() => navigate(`/tickets/${t.ticketId}`)}
-      className="grid gap-4 items-center p-4 bg-white dark:bg-dark-surface-container border border-slate-200 dark:border-dark-outline-variant rounded-xl cursor-pointer hover:border-primary/30 dark:hover:border-dark-primary/30 hover:shadow-sm transition-all"
+      className="grid gap-4 items-center p-4 bg-white dark:bg-dark-surface-container border border-slate-200 dark:border-dark-outline-variant rounded-xl cursor-pointer hover:border-primary/30 hover:shadow-sm transition-all"
       style={{ gridTemplateColumns: '130px 1fr auto auto' }}
     >
-      <div className="flex flex-col gap-1">
-        <span className="font-mono text-xs font-bold text-primary">HD-{t.ticketNumber}</span>
+      <div className="flex flex-col gap-1"> <span className="font-mono text-xs font-bold text-primary">HD-{t.ticketNumber}</span>
         <StatusChip id={t.status} />
       </div>
-      <div className="min-w-0">
-        <p className="text-sm font-semibold text-on-surface truncate">{t.subject}</p>
+      <div className="min-w-0"> <p className="text-sm font-semibold text-on-surface truncate">{t.subject}</p>
         <p className="text-xs text-on-surface-variant mt-0.5">{t.departmentName} · {t.supportTypeName}</p>
       </div>
       <PriorityChip id={t.priority} />
@@ -108,26 +106,20 @@ export default function DashCoord({ isAdmin }: Props) {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-wider text-secondary mb-1">
+      <div className="flex items-start justify-between"> <div> <p className="text-xs font-bold uppercase tracking-wider text-secondary mb-1">
             {isAdmin ? 'Vista de administración' : 'Vista de coordinación'}
           </p>
-          <h1 className="text-[32px] leading-10 font-semibold text-on-surface">Operación HelpDesk</h1>
-          <p className="text-sm text-on-surface-variant mt-1">
+          <h1 className="text-[32px] leading-10 font-semibold text-on-surface">Operación HelpDesk</h1> <p className="text-sm text-on-surface-variant mt-1">
             {isAdmin ? 'Resumen global de la mesa de servicio.' : 'Resumen del departamento de Tecnología.'}
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <Button variant="outlined" leading="download">Exportar</Button>
-          <Button variant="tonal" leading="grid_on" onClick={() => navigate('/heatmap')}>Mapa de calor</Button>
+        <div className="flex items-center gap-3"> <Button variant="outlined" leading="download">Exportar</Button> <Button variant="tonal" leading="grid_on" onClick={() => navigate('/heatmap')}>Mapa de calor</Button>
           <Button leading="monitoring" onClick={() => navigate('/metrics')}>Métricas</Button>
         </div>
       </div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-4 gap-5">
-        <KpiCard icon="confirmation_number" label="Tickets totales" value={totalTickets} />
+      <div className="grid grid-cols-4 gap-5"> <KpiCard icon="confirmation_number" label="Tickets totales" value={totalTickets} />
         <KpiCard icon="speed" label="Cumplimiento SLA" value={`${slaCompliance.toFixed(1)}%`}
           iconBg="#D5F5DD" iconColor="#0E5C25" />
         <KpiCard icon="schedule" label="Tiempo medio resolución" value={`${avgResolution.toFixed(1)} h`} />
@@ -139,9 +131,7 @@ export default function DashCoord({ isAdmin }: Props) {
       <div className="grid gap-6" style={{ gridTemplateColumns: '1.4fr 1fr' }}>
         {/* Volume chart */}
         <Card>
-          <div className="flex items-center justify-between mb-5">
-            <h3 className="text-base font-semibold text-on-surface">Volumen — últimas semanas</h3>
-            <span className="text-xs text-on-surface-variant">Creados vs. cerrados</span>
+          <div className="flex items-center justify-between mb-5"> <h3 className="text-base font-semibold text-on-surface">Volumen — últimas semanas</h3> <span className="text-xs text-on-surface-variant">Creados vs. cerrados</span>
           </div>
           {trend.length > 0 ? (
             <>
@@ -150,8 +140,7 @@ export default function DashCoord({ isAdmin }: Props) {
                 style={{ height: 120, display: 'grid', gridTemplateColumns: `repeat(${trend.length}, 1fr)` }}
               >
                 {trend.map((d, i) => (
-                  <div key={i} className="flex items-end gap-[2px] h-full">
-                    <div className="flex-1 bg-primary rounded-t-sm hover:opacity-80 transition-opacity"
+                  <div key={i} className="flex items-end gap-[2px] h-full"> <div className="flex-1 bg-primary rounded-t-sm hover:opacity-80 transition-opacity"
                       style={{ height: `${(d.created / maxVol) * 100}%` }} title={`Creados: ${d.created}`} />
                     <div className="flex-1 bg-tertiary rounded-t-sm hover:opacity-80 transition-opacity"
                       style={{ height: `${(d.closed / maxVol) * 100}%` }} title={`Cerrados: ${d.closed}`} />
@@ -166,23 +155,17 @@ export default function DashCoord({ isAdmin }: Props) {
               </div>
             </>
           ) : (
-            <div className="h-32 flex items-center justify-center text-sm text-on-surface-variant">Sin datos de tendencia.</div>
-          )}
-          <div className="flex gap-4 mt-3 text-xs text-on-surface-variant">
-            <span className="flex items-center gap-1.5"><span className="w-3 h-2 rounded-sm bg-primary inline-block" />Creados</span>
-            <span className="flex items-center gap-1.5"><span className="w-3 h-2 rounded-sm bg-tertiary inline-block" />Cerrados</span>
+            <div className="h-32 flex items-center justify-center text-sm text-on-surface-variant">Sin datos de tendencia.</div> )} <div className="flex gap-4 mt-3 text-xs text-on-surface-variant"> <span className="flex items-center gap-1.5"><span className="w-3 h-2 rounded-sm bg-primary inline-block" />Creados</span> <span className="flex items-center gap-1.5"><span className="w-3 h-2 rounded-sm bg-tertiary inline-block" />Cerrados</span>
           </div>
         </Card>
 
         {/* Status donut */}
         <Card>
-          <h3 className="text-base font-semibold text-on-surface mb-4">Distribución por estado</h3>
-          <div className="flex items-center gap-6">
+          <h3 className="text-base font-semibold text-on-surface mb-4">Distribución por estado</h3> <div className="flex items-center gap-6">
             <Donut data={statusCounts.map(s => ({ count: s.count, color: STATUS_COLORS[s.id] ?? '#9E9E9E' }))} size={160} thickness={24} />
             <div className="space-y-2 flex-1">
               {statusCounts.map(s => (
-                <div key={s.id} className="flex items-center gap-2 text-sm">
-                  <span className="w-2.5 h-2.5 rounded-sm shrink-0" style={{ background: s.color }} />
+                <div key={s.id} className="flex items-center gap-2 text-sm"> <span className="w-2.5 h-2.5 rounded-sm shrink-0" style={{ background: s.color }} />
                   <span className="flex-1 text-on-surface-variant">{s.label}</span>
                   <span className="font-semibold text-on-surface">{s.count}</span>
                 </div>
@@ -194,17 +177,9 @@ export default function DashCoord({ isAdmin }: Props) {
 
       {/* SLA breach tickets */}
       <section>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-on-surface">Tickets en riesgo SLA</h2>
-          <Button variant="text" trailing="arrow_forward" onClick={() => navigate('/tickets')}>Ver todos</Button>
+        <div className="flex items-center justify-between mb-4"> <h2 className="text-lg font-semibold text-on-surface">Tickets en riesgo SLA</h2> <Button variant="text" trailing="arrow_forward" onClick={() => navigate('/tickets')}>Ver todos</Button>
         </div>
         <div className="space-y-3">
           {breaching.map(t => <TicketRow key={t.ticketId} t={t} />)}
           {breaching.length === 0 && (
-            <Card><p className="text-sm text-center text-on-surface-variant py-4">No hay tickets en riesgo de SLA. ✓</p></Card>
-          )}
-        </div>
-      </section>
-    </div>
-  )
-}
+            <Card><p className="text-sm text-center text-on-surface-variant py-4">No hay tickets en riesgo de SLA. ✓</p></Card> )} </div> </section> </div> )}

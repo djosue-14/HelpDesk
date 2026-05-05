@@ -18,6 +18,7 @@ import {
   RateDialog,
   ConfirmDialog,
 } from '@/components/dialogs/TicketDialogs'
+import { TextField } from '@/components/shared/TextField'
 import type { Role } from '@/data/types'
 import type { TicketStatus, TicketPriority } from '@t/enums'
 import type { TicketCommentDto } from '@t/dtos'
@@ -140,16 +141,12 @@ export default function TicketDetail({ role }: Props) {
       <div className="space-y-4 max-w-[1400px]">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-on-surface-variant">
-          <button onClick={() => navigate(-1)} className="hover:text-primary transition-colors">Tickets</button>
-          <Icon name="chevron_right" size={16} />
+          <button onClick={() => navigate(-1)} className="hover:text-primary transition-colors">Tickets</button> <Icon name="chevron_right" size={16} />
           <span className="text-on-surface font-medium">{ticketCode}</span>
         </div>
 
         {/* Header */}
-        <div className="flex items-start justify-between gap-6">
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2 flex-wrap mb-2">
-              <span className="font-mono text-sm font-bold text-primary">{ticketCode}</span>
+        <div className="flex items-start justify-between gap-6"> <div className="min-w-0 flex-1"> <div className="flex items-center gap-2 flex-wrap mb-2"> <span className="font-mono text-sm font-bold text-primary">{ticketCode}</span>
               <StatusChip id={ticket.status} />
               <PriorityChip id={ticket.priority} />
               <SlaTraffic state={slaState} label={`SLA ${slaLabel}`} />
@@ -182,8 +179,7 @@ export default function TicketDetail({ role }: Props) {
         {/* Main grid */}
         <div className="grid gap-6" style={{ gridTemplateColumns: '1fr 300px' }}>
           {/* Left: tabs + content */}
-          <div className="space-y-4">
-            <div className="flex border-b border-slate-200 dark:border-dark-outline-variant">
+          <div className="space-y-4"> <div className="flex border-b border-slate-200 dark:border-dark-outline-variant">
               {([
                 ['thread', 'forum', `Conversación (${allComments.length})`],
                 ['history', 'history', 'Historial'],
@@ -192,8 +188,8 @@ export default function TicketDetail({ role }: Props) {
                 <button key={id} onClick={() => setTab(id)}
                   className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
                     tab === id
-                      ? 'border-primary dark:border-dark-primary text-primary dark:text-dark-primary'
-                      : 'border-transparent text-slate-500 dark:text-dark-on-surface-variant hover:text-on-surface dark:hover:text-dark-on-surface'
+                      ? 'border-primary text-primary'
+                      : 'border-transparent text-slate-500 dark:text-dark-on-surface-variant hover:text-on-surface'
                   }`}>
                   <Icon name={icon} size={16} />
                   {label}
@@ -211,13 +207,11 @@ export default function TicketDetail({ role }: Props) {
                     <div key={c.ticketCommentId} className={`flex gap-3 ${isInternal ? 'opacity-90' : ''}`}>
                       <Avatar user={author} size="md" />
                       <div className={`flex-1 min-w-0 rounded-xl p-4 ${
-                        isInternal ? 'bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/40' : 'bg-surface-container-low dark:bg-dark-surface-container-low border border-slate-100 dark:border-dark-outline-variant/50'
+                        isInternal ? 'bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/40' : 'bg-surface-container-low border border-slate-100 dark:border-dark-outline-variant/50'
                       }`}>
                         <div className="flex items-center gap-2 mb-2 flex-wrap">
-                          {isInternal && <Icon name="lock" size={14} className="text-amber-600 dark:text-amber-400" />}
-                          <span className="text-sm font-semibold text-on-surface">{author?.name ?? c.authorId}</span>
-                          {isInternal && <span className="text-xs font-bold text-amber-700 dark:text-amber-400">· Nota interna</span>}
-                          <span className="ml-auto text-xs text-on-surface-variant">{formatDate(c.createdAt)}</span>
+                          {isInternal && <Icon name="lock" size={14} className="text-amber-600 dark:text-amber-400" />} <span className="text-sm font-semibold text-on-surface">{author?.name ?? c.authorId}</span>
+                          {isInternal && <span className="text-xs font-bold text-amber-700 dark:text-amber-400">· Nota interna</span>} <span className="ml-auto text-xs text-on-surface-variant">{formatDate(c.createdAt)}</span>
                         </div>
                         <p className="text-sm text-on-surface leading-relaxed">{c.content}</p>
                       </div>
@@ -226,30 +220,27 @@ export default function TicketDetail({ role }: Props) {
                 })}
 
                 {allComments.length === 0 && (
-                  <div className="text-sm text-center text-on-surface-variant py-8">Sin comentarios aún.</div>
-                )}
+                  <div className="text-sm text-center text-on-surface-variant py-8">Sin comentarios aún.</div> )}
 
                 {/* Composer */}
                 {ticket.status !== 'Closed' && (
                   <div className={`rounded-xl border p-4 ${internal ? 'border-amber-300 dark:border-amber-700/40 bg-amber-50 dark:bg-amber-900/20' : 'border-slate-200 dark:border-dark-outline-variant bg-white dark:bg-dark-surface-container'}`}>
-                    <textarea
-                      className="w-full bg-transparent text-sm text-on-surface placeholder:text-slate-400 resize-none outline-none min-h-[80px]"
+                    <TextField
+                      multiline
+                      rows={3}
                       placeholder={internal ? 'Escribe una nota visible solo para agentes…' : 'Escribe una respuesta…'}
                       value={composer}
                       onChange={e => setComposer(e.target.value)}
+                      className="[&_textarea]:border-none [&_textarea]:bg-transparent [&_textarea]:min-h-[80px]"
                     />
-                    <div className="flex items-center gap-2 mt-3 pt-3 border-t border-slate-200 dark:border-dark-outline-variant">
-                      <button className="p-1.5 text-slate-400 dark:text-dark-on-surface-variant hover:text-primary dark:hover:text-dark-primary rounded transition-colors" title="Adjuntar">
-                        <Icon name="attach_file" size={18} />
+                    <div className="flex items-center gap-2 mt-3 pt-3 border-t border-slate-200 dark:border-dark-outline-variant"> <button className="p-1.5 text-slate-400 dark:text-dark-on-surface-variant hover:text-primary rounded transition-colors" title="Adjuntar"> <Icon name="attach_file" size={18} />
                       </button>
                       {isAgent && (
-                        <label className="flex items-center gap-2 text-xs text-on-surface-variant cursor-pointer ml-1">
-                          <input type="checkbox" checked={internal} onChange={e => setInternal(e.target.checked)} />
+                        <label className="flex items-center gap-2 text-xs text-on-surface-variant cursor-pointer ml-1"> <input type="checkbox" checked={internal} onChange={e => setInternal(e.target.checked)} />
                           Nota interna
                         </label>
                       )}
-                      <span className="flex-1" />
-                      <Button leading="send" size="sm" disabled={!composer.trim() || addCommentMutation.isPending} onClick={send}>
+                      <span className="flex-1" /> <Button leading="send" size="sm" disabled={!composer.trim() || addCommentMutation.isPending} onClick={send}>
                         {addCommentMutation.isPending ? 'Enviando…' : 'Enviar'}
                       </Button>
                     </div>
@@ -264,15 +255,10 @@ export default function TicketDetail({ role }: Props) {
                 {history.length === 0
                   ? <Card><p className="text-sm text-center text-on-surface-variant py-6">Sin historial disponible.</p></Card>
                   : history.map((h, i) => (
-                    <div key={i} className="flex gap-4 py-3">
-                      <div className="flex flex-col items-center gap-0.5">
-                        <span className="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+                    <div key={i} className="flex gap-4 py-3"> <div className="flex flex-col items-center gap-0.5"> <span className="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center shrink-0">
                           <Icon name={h.icon} size={15} className="text-primary" />
                         </span>
-                        {i < history.length - 1 && <span className="flex-1 w-px bg-slate-200 dark:bg-dark-outline-variant mt-1" />}
-                      </div>
-                      <div className="flex-1 pb-3">
-                        <p className="text-sm text-on-surface">{h.text}</p>
+                        {i < history.length - 1 && <span className="flex-1 w-px bg-slate-200 dark:bg-dark-outline-variant mt-1" />} </div> <div className="flex-1 pb-3"> <p className="text-sm text-on-surface">{h.text}</p>
                         <p className="text-xs text-on-surface-variant mt-0.5">{h.when}</p>
                       </div>
                     </div>
@@ -287,8 +273,7 @@ export default function TicketDetail({ role }: Props) {
                   ? <Card><p className="text-sm text-center text-on-surface-variant py-6">Sin archivos adjuntos.</p></Card>
                   : ticket.attachments.map(a => (
                     <div key={a.ticketAttachmentId} className="flex items-center gap-3 p-4 rounded-xl border border-slate-200 dark:border-dark-outline-variant bg-white dark:bg-dark-surface-container">
-                      <Icon name={getFileIcon(a.fileExtension)} size={20} className="text-primary" />
-                      <span className="flex-1 text-sm font-medium text-on-surface">{a.originalFileName}</span>
+                      <Icon name={getFileIcon(a.fileExtension)} size={20} className="text-primary" /> <span className="flex-1 text-sm font-medium text-on-surface">{a.originalFileName}</span>
                       <span className="text-xs text-on-surface-variant">{formatBytes(a.fileSizeBytes)}</span>
                       <Button variant="text" size="sm" leading="download">Descargar</Button>
                     </div>
@@ -298,10 +283,7 @@ export default function TicketDetail({ role }: Props) {
           </div>
 
           {/* Right sidebar */}
-          <aside className="space-y-4">
-            <Card>
-              <p className="text-xs font-bold uppercase tracking-wider text-secondary mb-3">Detalles</p>
-              <div className="space-y-3">
+          <aside className="space-y-4"> <Card> <p className="text-xs font-bold uppercase tracking-wider text-secondary mb-3">Detalles</p> <div className="space-y-3">
                 {[
                   { lbl: 'Solicitante', content: requester
                     ? <div className="flex items-center gap-2 mt-1"><Avatar user={requester} size="sm" /><span className="text-sm text-on-surface">{requester.name}</span></div>
@@ -309,8 +291,7 @@ export default function TicketDetail({ role }: Props) {
                   },
                   { lbl: 'Asignado a', content: assignee
                     ? <div className="flex items-center gap-2 mt-1"><Avatar user={assignee} size="sm" /><span className="text-sm text-on-surface">{assignee.name}</span></div>
-                    : <span className="text-sm text-on-surface-variant italic">— Sin asignar —</span>
-                  },
+                    : <span className="text-sm text-on-surface-variant italic">— Sin asignar —</span>},
                   { lbl: 'Departamento',    content: <span className="text-sm text-on-surface">{ticket.departmentName ?? '—'}</span> },
                   { lbl: 'Tipo de soporte', content: <span className="text-sm text-on-surface">{ticket.supportTypeName ?? '—'}</span> },
                   { lbl: 'Creado',          content: <span className="text-sm text-on-surface">{formatDate(ticket.createdAt)}</span> },
@@ -325,8 +306,7 @@ export default function TicketDetail({ role }: Props) {
             </Card>
 
             <Card>
-              <p className="text-xs font-bold uppercase tracking-wider text-secondary mb-3">SLA</p>
-              <div className="flex items-center justify-between mb-2">
+              <p className="text-xs font-bold uppercase tracking-wider text-secondary mb-3">SLA</p> <div className="flex items-center justify-between mb-2">
                 <SlaTraffic state={slaState} label={slaLabel} />
                 <span className="text-xs text-on-surface-variant">{slaConsumedPct}% consumido</span>
               </div>
@@ -338,14 +318,13 @@ export default function TicketDetail({ role }: Props) {
 
             {isAgent && (
               <Card>
-                <p className="text-xs font-bold uppercase tracking-wider text-secondary mb-3">Cambiar prioridad</p>
-                <div className="flex flex-wrap gap-1.5">
+                <p className="text-xs font-bold uppercase tracking-wider text-secondary mb-3">Cambiar prioridad</p> <div className="flex flex-wrap gap-1.5">
                   {PRIORITIES.map(p => (
                     <button key={p.id}
                       className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                         ticket.priority === p.id
-                          ? 'bg-primary dark:bg-dark-primary text-white dark:text-dark-on-primary'
-                          : 'bg-surface-container dark:bg-dark-surface-container text-on-surface-variant dark:text-dark-on-surface-variant hover:bg-surface-container-high dark:hover:bg-dark-surface-container-high'
+                          ? 'bg-primary text-white dark:text-dark-on-primary'
+                          : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high'
                       }`}>
                       {p.name}
                     </button>

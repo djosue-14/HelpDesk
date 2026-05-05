@@ -4,6 +4,7 @@ import { departmentService, supportTypeService, ticketService } from '@api/servi
 import Button from '@/components/shared/Button'
 import Icon from '@/components/shared/Icon'
 import { StarsInput } from '@/components/shared/Stars'
+import { TextField } from '@/components/shared/TextField'
 import type { TicketPriority } from '@t/enums'
 
 const PRIORITIES: { id: TicketPriority; name: string; sla: string }[] = [
@@ -31,10 +32,8 @@ function Scrim({ onClose, children, wide }: { onClose: () => void; children: Rea
 function DialogHead({ icon, title, onClose }: { icon: string; title: string; onClose: () => void }) {
   return (
     <div className="flex items-center gap-3 px-6 py-4 border-b border-slate-100 dark:border-dark-outline-variant">
-      <Icon name={icon} size={22} className="text-primary dark:text-dark-primary" />
-      <h3 className="text-base font-semibold text-on-surface dark:text-dark-on-surface flex-1">{title}</h3>
-      <button onClick={onClose} className="p-1 text-slate-400 dark:text-dark-on-surface-variant hover:text-on-surface dark:hover:text-dark-on-surface rounded transition-colors">
-        <Icon name="close" size={20} />
+      <Icon name={icon} size={22} className="text-primary" /> <h3 className="text-base font-semibold text-on-surface flex-1">{title}</h3>
+      <button onClick={onClose} className="p-1 text-slate-400 dark:text-dark-on-surface-variant hover:text-on-surface rounded transition-colors"> <Icon name="close" size={20} />
       </button>
     </div>
   )
@@ -50,8 +49,7 @@ function DialogFoot({ children }: { children: React.ReactNode }) {
 
 function Field({ label, required, helper, children }: { label: string; required?: boolean; helper?: string; children: React.ReactNode }) {
   return (
-    <div className="flex flex-col gap-1">
-      <label className="text-xs font-semibold text-on-surface-variant dark:text-dark-on-surface-variant">
+    <div className="flex flex-col gap-1"> <label className="text-xs font-semibold text-on-surface-variant">
         {label} {required && <span className="text-error">*</span>}
       </label>
       {children}
@@ -60,7 +58,7 @@ function Field({ label, required, helper, children }: { label: string; required?
   )
 }
 
-const inputCls = 'w-full border border-slate-200 dark:border-dark-outline-variant rounded-lg px-3 py-2 text-sm text-on-surface dark:text-dark-on-surface focus:outline-none focus:border-primary dark:focus:border-dark-primary bg-surface-container-low dark:bg-dark-surface-container-low'
+const selectCls = 'w-full border border-slate-200 dark:border-dark-outline-variant rounded-lg px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary bg-surface-container-low'
 
 /* ── Create ticket ── */
 export function CreateTicketDialog({ onClose, onCreated }: { onClose: () => void; onCreated: () => void }) {
@@ -116,29 +114,30 @@ export function CreateTicketDialog({ onClose, onCreated }: { onClose: () => void
     <Scrim onClose={onClose} wide>
       <DialogHead icon="add_circle" title="Crear nuevo ticket" onClose={onClose} />
       <DialogBody>
-        <div className="grid grid-cols-2 gap-4">
-          <Field label="Departamento" required helper="A quién va dirigida la solicitud.">
-            <select className={inputCls} value={deptId ?? ''} onChange={e => pickDept(Number(e.target.value))}>
+        <div className="grid grid-cols-2 gap-4"> <Field label="Departamento" required helper="A quién va dirigida la solicitud.">
+            <select className={selectCls} value={deptId ?? ''} onChange={e => pickDept(Number(e.target.value))}>
               {departments.map(d => <option key={d.departmentId} value={d.departmentId}>{d.name}</option>)}
             </select>
           </Field>
           <Field label="Tipo de soporte" required helper="Define la prioridad sugerida y el SLA.">
-            <select className={inputCls} value={typeId ?? ''} onChange={e => setTypeId(Number(e.target.value))}>
+            <select className={selectCls} value={typeId ?? ''} onChange={e => setTypeId(Number(e.target.value))}>
               {types.map(t => <option key={t.supportTypeId} value={t.supportTypeId}>{t.name}</option>)}
             </select>
           </Field>
         </div>
 
-        <Field label="Asunto" required helper={`${subject.length}/120 caracteres`}>
-          <input className={inputCls} placeholder="Resume el problema en una línea"
-            value={subject} onChange={e => setSubject(e.target.value)} maxLength={120} />
-        </Field>
+        <TextField
+          label="Asunto" required
+          placeholder="Resume el problema en una línea"
+          value={subject} onChange={e => setSubject(e.target.value)} maxLength={120}
+          helperText={`${subject.length}/120 caracteres`}
+        />
 
-        <Field label="Descripción" required>
-          <textarea className={inputCls} rows={4}
-            placeholder="Cuéntanos qué pasó, desde cuándo, qué intentaste y cualquier detalle útil."
-            value={desc} onChange={e => setDesc(e.target.value)} />
-        </Field>
+        <TextField
+          label="Descripción" required multiline rows={4}
+          placeholder="Cuéntanos qué pasó, desde cuándo, qué intentaste y cualquier detalle útil."
+          value={desc} onChange={e => setDesc(e.target.value)}
+        />
 
         <Field label="Prioridad" helper="El coordinador puede ajustar la prioridad después.">
           <div className="grid grid-cols-4 gap-2">
@@ -146,7 +145,7 @@ export function CreateTicketDialog({ onClose, onCreated }: { onClose: () => void
               <button key={p.id} type="button"
                 onClick={() => setPriority(p.id)}
                 className={`flex flex-col items-center gap-0.5 p-3 rounded-xl border-2 text-xs font-semibold transition-colors ${
-                  priority === p.id ? 'border-primary dark:border-dark-primary bg-primary/5 dark:bg-dark-primary/5 text-primary dark:text-dark-primary' : 'border-slate-200 dark:border-dark-outline-variant text-on-surface-variant dark:text-dark-on-surface-variant hover:border-slate-300 dark:hover:border-dark-outline-variant'
+                  priority === p.id ? 'border-primary bg-primary/5 text-primary' : 'border-slate-200 dark:border-dark-outline-variant text-on-surface-variant hover:border-slate-300 dark:hover:border-dark-outline-variant'
                 }`}>
                 <span>{p.name}</span>
                 <span className="font-normal opacity-70">SLA {p.sla}</span>
@@ -156,17 +155,7 @@ export function CreateTicketDialog({ onClose, onCreated }: { onClose: () => void
         </Field>
 
         <Field label="Archivos adjuntos">
-          <div className="border-2 border-dashed border-slate-200 dark:border-dark-outline-variant rounded-xl p-6 text-center hover:border-primary/40 dark:hover:border-dark-primary/40 transition-colors cursor-pointer">
-            <Icon name="cloud_upload" size={28} className="text-slate-400 dark:text-dark-on-surface-variant mx-auto mb-2" />
-            <p className="text-sm text-on-surface dark:text-dark-on-surface">
-              <span className="text-primary dark:text-dark-primary font-semibold">Selecciona</span> o arrastra archivos aquí
-            </p>
-            <p className="text-xs text-on-surface-variant dark:text-dark-on-surface-variant mt-1">PNG, JPG, PDF, ZIP · Hasta 10 MB cada uno</p>
-          </div>
-        </Field>
-      </DialogBody>
-      <DialogFoot>
-        <Button variant="text" onClick={onClose}>Cancelar</Button>
+          <div className="border-2 border-dashed border-slate-200 dark:border-dark-outline-variant rounded-xl p-6 text-center hover:border-primary/40 transition-colors cursor-pointer"> <Icon name="cloud_upload" size={28} className="text-slate-400 mx-auto mb-2" /> <p className="text-sm text-on-surface"> <span className="text-primary font-semibold">Selecciona</span> o arrastra archivos aquí </p> <p className="text-xs text-on-surface-variant mt-1">PNG, JPG, PDF, ZIP · Hasta 10 MB cada uno</p> </div> </Field> </DialogBody> <DialogFoot> <Button variant="text" onClick={onClose}>Cancelar</Button>
         <Button variant="outlined" leading="save">Guardar borrador</Button>
         <Button leading="send" disabled={!valid || createMutation.isPending}
           onClick={() => createMutation.mutate()}>
@@ -204,21 +193,13 @@ export function CloseTicketDialog({ ticketCode, onClose, onConfirm }: { ticketCo
     <Scrim onClose={onClose}>
       <DialogHead icon="check_circle" title={`Cerrar ticket ${ticketCode}`} onClose={onClose} />
       <DialogBody>
-        <p className="text-sm text-on-surface-variant">
-          Describe la solución para que el solicitante entienda cómo se resolvió.
-        </p>
-        <Field label="Resolución" required>
-          <textarea className={inputCls} rows={4} value={resolution}
-            onChange={e => setResolution(e.target.value)}
-            placeholder="Ej. Se actualizó el firmware del dock WD19TBS a la versión 01.00.16; pantalla externa estable." />
-        </Field>
-        <div className="flex items-center gap-2 p-3 rounded-lg bg-surface-container dark:bg-dark-surface-container text-sm text-on-surface-variant dark:text-dark-on-surface-variant">
-          <Icon name="info" size={16} className="text-primary dark:text-dark-primary shrink-0" />
-          El solicitante podrá calificar tu atención al cerrar.
-        </div>
-      </DialogBody>
-      <DialogFoot>
-        <Button variant="text" onClick={onClose}>Cancelar</Button>
+        <p className="text-sm text-on-surface-variant"> Describe la solución para que el solicitante entienda cómo se resolvió. </p>
+        <TextField
+          label="Resolución" required multiline rows={4}
+          value={resolution} onChange={e => setResolution(e.target.value)}
+          placeholder="Ej. Se actualizó el firmware del dock WD19TBS a la versión 01.00.16; pantalla externa estable."
+        />
+        <div className="flex items-center gap-2 p-3 rounded-lg bg-surface-container text-sm text-on-surface-variant"> <Icon name="info" size={16} className="text-primary shrink-0" /> El solicitante podrá calificar tu atención al cerrar. </div> </DialogBody> <DialogFoot> <Button variant="text" onClick={onClose}>Cancelar</Button>
         <Button leading="check_circle" disabled={resolution.length < 5} onClick={() => onConfirm(resolution)}>Cerrar ticket</Button>
       </DialogFoot>
     </Scrim>
@@ -255,12 +236,8 @@ export function RedirectDialog({ ticketCode, onClose, onConfirm }: { ticketCode:
     <Scrim onClose={onClose}>
       <DialogHead icon="alt_route" title={`Redirigir ${ticketCode}`} onClose={onClose} />
       <DialogBody>
-        <p className="text-sm text-on-surface-variant">
-          Reasigna este ticket a otro departamento. El SLA se reinicia al ser tomado.
-        </p>
-        <div className="grid grid-cols-2 gap-4">
-          <Field label="Departamento">
-            <select className={inputCls} value={deptId ?? ''} onChange={e => {
+        <p className="text-sm text-on-surface-variant"> Reasigna este ticket a otro departamento. El SLA se reinicia al ser tomado. </p> <div className="grid grid-cols-2 gap-4"> <Field label="Departamento">
+            <select className={selectCls} value={deptId ?? ''} onChange={e => {
               const id = Number(e.target.value)
               setDeptId(id)
               setTypeId(allTypes.find(t => t.departmentId === id)?.supportTypeId ?? null)
@@ -269,16 +246,16 @@ export function RedirectDialog({ ticketCode, onClose, onConfirm }: { ticketCode:
             </select>
           </Field>
           <Field label="Tipo de soporte">
-            <select className={inputCls} value={typeId ?? ''} onChange={e => setTypeId(Number(e.target.value))}>
+            <select className={selectCls} value={typeId ?? ''} onChange={e => setTypeId(Number(e.target.value))}>
               {types.map(t => <option key={t.supportTypeId} value={t.supportTypeId}>{t.name}</option>)}
             </select>
           </Field>
         </div>
-        <Field label="Motivo">
-          <textarea className={inputCls} rows={3} value={reason}
-            onChange={e => setReason(e.target.value)}
-            placeholder="Explica brevemente por qué se redirige." />
-        </Field>
+        <TextField
+          label="Motivo" multiline rows={3}
+          value={reason} onChange={e => setReason(e.target.value)}
+          placeholder="Explica brevemente por qué se redirige."
+        />
       </DialogBody>
       <DialogFoot>
         <Button variant="text" onClick={onClose}>Cancelar</Button>
@@ -302,8 +279,7 @@ export function RateDialog({ ticketCode, onClose, onConfirm }: { ticketCode: str
     <Scrim onClose={onClose}>
       <DialogHead icon="reviews" title={`Califica ${ticketCode}`} onClose={onClose} />
       <DialogBody>
-        <p className="text-base font-medium text-on-surface text-center">¿Qué tan satisfecho estás con la atención?</p>
-        <div className="flex justify-center py-2">
+        <p className="text-base font-medium text-on-surface text-center">¿Qué tan satisfecho estás con la atención?</p> <div className="flex justify-center py-2">
           <StarsInput value={stars} onChange={setStars} />
         </div>
         <p className="text-sm text-on-surface-variant text-center min-h-5">{STAR_LABELS[stars]}</p>
@@ -314,7 +290,7 @@ export function RateDialog({ ticketCode, onClose, onConfirm }: { ticketCode: str
               <button key={t} type="button"
                 onClick={() => tog(t)}
                 className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-                  picked.includes(t) ? 'bg-primary dark:bg-dark-primary text-white dark:text-dark-on-primary' : 'bg-surface-container dark:bg-dark-surface-container text-on-surface-variant dark:text-dark-on-surface-variant hover:bg-surface-container-high dark:hover:bg-dark-surface-container-high'
+                  picked.includes(t) ? 'bg-primary text-white dark:text-dark-on-primary' : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high'
                 }`}>
                 {t}
               </button>
@@ -322,11 +298,11 @@ export function RateDialog({ ticketCode, onClose, onConfirm }: { ticketCode: str
           </div>
         </Field>
 
-        <Field label="Comentario (opcional)">
-          <textarea className={inputCls} rows={3} value={text}
-            onChange={e => setText(e.target.value)}
-            placeholder="Cuéntanos cómo fue tu experiencia." />
-        </Field>
+        <TextField
+          label="Comentario (opcional)" multiline rows={3}
+          value={text} onChange={e => setText(e.target.value)}
+          placeholder="Cuéntanos cómo fue tu experiencia."
+        />
       </DialogBody>
       <DialogFoot>
         <Button variant="text" onClick={onClose}>Más tarde</Button>

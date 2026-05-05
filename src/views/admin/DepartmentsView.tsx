@@ -1,9 +1,12 @@
+import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { departmentService } from '@api/services'
-import { supportTypeService } from '@api/services'
+import { departmentService, supportTypeService } from '@api/services'
 import { HD_DEPARTMENTS } from '@data/seed'
 import Button from '@/components/shared/Button'
 import Icon from '@/components/shared/Icon'
+import { Table } from '@components/shared/Table'
+import type { ColumnDef } from '@components/shared/Table'
+import type { DepartmentDto } from '@t/dtos'
 
 export default function CatalogDepartments() {
   const { data: departments = [], isLoading } = useQuery({
@@ -25,6 +28,79 @@ export default function CatalogDepartments() {
     return supportTypes.filter(t => t.departmentId === deptId).length
   }
 
+  const columns = useMemo<ColumnDef<DepartmentDto>[]>(() => [
+    {
+      accessorKey: 'departmentId',
+      header: 'ID',
+      size: 70,
+      cell: ({ getValue }) => (
+        <span className="font-mono text-xs font-bold text-primary">
+          D{String(getValue<number>()).padStart(2, '0')}
+        </span>
+      ),
+    },
+    {
+      accessorKey: 'name',
+      header: 'Nombre',
+      cell: ({ row }) => {
+        const { color, icon } = getSeedVisuals(row.original.name)
+        return (
+          <div className="flex items-center gap-3">
+            <span
+              className="w-8 h-8 rounded-lg flex items-center justify-center text-white shrink-0"
+              style={{ background: color }}
+            >
+              <Icon name={icon} size={16} fill={1} />
+            </span>
+            <span className="font-semibold text-on-surface">{row.original.name}</span>
+          </div>
+        )
+      },
+    },
+    {
+      id: 'supportTypes',
+      header: 'Tipos de soporte',
+      cell: ({ row }) => (
+        <span className="text-on-surface-variant">
+          {countTypes(row.original.departmentId)} tipos
+        </span>
+      ),
+    },
+    {
+      accessorKey: 'coordinatorUserId',
+      header: 'Coordinador',
+      cell: ({ getValue }) => (
+        <span className="text-on-surface-variant">{getValue<string | null>() ?? '—'}</span>
+      ),
+    },
+    {
+      accessorKey: 'isEnabled',
+      header: 'Estado',
+      enableSorting: false,
+      cell: ({ getValue }) => {
+        const active = getValue<boolean>()
+        return (
+          <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${
+            active
+              ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+              : 'bg-surface-container-high text-on-surface-variant'
+          }`}>
+            {active ? 'Activo' : 'Inactivo'}
+          </span>
+        )
+      },
+    },
+    {
+      id: 'actions',
+      header: '',
+      size: 100,
+      enableSorting: false,
+      cell: () => (
+        <Button variant="text" size="sm" leading="edit">Editar</Button>
+      ),
+    },
+  ], [supportTypes])
+
   return (
     <div className="space-y-6">
       <div className="flex items-start justify-between">
@@ -35,50 +111,13 @@ export default function CatalogDepartments() {
         <Button leading="add">Nuevo departamento</Button>
       </div>
 
-      <div className="bg-white dark:bg-dark-surface-container rounded-xl border border-slate-100 dark:border-dark-outline-variant shadow-sm overflow-hidden">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-slate-100 dark:border-dark-outline-variant bg-surface-container-low dark:bg-dark-surface-container-low">
-              {['ID', 'Nombre', 'Tipos de soporte', 'Coordinador', 'Estado', ''].map(h => (
-                <th key={h} className="text-left px-5 py-3 text-xs font-semibold text-slate-500 dark:text-dark-on-surface-variant uppercase tracking-wider">{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-50 dark:divide-dark-outline-variant/30">
-            {isLoading ? (
-              <tr><td colSpan={6} className="px-5 py-8 text-center text-sm text-on-surface-variant">Cargando…</td></tr>
-            ) : departments.map(d => {
-              const { color, icon } = getSeedVisuals(d.name)
-              return (
-                <tr key={d.departmentId} className="hover:bg-surface-container-low transition-colors">
-                  <td className="px-5 py-4 font-mono text-xs font-bold text-primary">D{String(d.departmentId).padStart(2, '0')}</td>
-                  <td className="px-5 py-4">
-                    <div className="flex items-center gap-3">
-                      <span className="w-8 h-8 rounded-lg flex items-center justify-center text-white shrink-0"
-                        style={{ background: color }}>
-                        <Icon name={icon} size={16} fill={1} />
-                      </span>
-                      <span className="font-semibold text-on-surface">{d.name}</span>
-                    </div>
-                  </td>
-                  <td className="px-5 py-4 text-on-surface-variant">{countTypes(d.departmentId)} tipos</td>
-                  <td className="px-5 py-4 text-on-surface-variant">{d.coordinatorUserId ?? '—'}</td>
-                  <td className="px-5 py-4">
-                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${
-                      d.isEnabled ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-slate-100 dark:bg-dark-surface-container-high text-slate-600 dark:text-dark-on-surface-variant'
-                    }`}>
-                      {d.isEnabled ? 'Activo' : 'Inactivo'}
-                    </span>
-                  </td>
-                  <td className="px-5 py-4">
-                    <Button variant="text" size="sm" leading="edit">Editar</Button>
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      </div>
+      <Table<DepartmentDto>
+        data={isLoading ? [] : departments}
+        columns={columns}
+        emptyMessage={isLoading ? 'Cargando...' : 'No hay departamentos registrados'}
+        searchable
+        searchPlaceholder="Buscar departamento..."
+      />
     </div>
   )
 }

@@ -31,14 +31,7 @@ export default function SideNav() {
   return (
     <nav className="flex-none w-72 h-full z-40 border-r border-slate-200/60 dark:border-dark-outline-variant bg-white dark:bg-dark-surface-container shadow-[4px_0_12px_rgba(42,99,138,0.05)] flex flex-col overflow-y-auto">
       {/* Brand */}
-      <div className="px-6 pt-6 pb-4">
-        <div className="flex items-center gap-3 mb-8">
-          <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center shadow-md shrink-0">
-            <Icon name="support_agent" size={20} className="text-white" />
-          </div>
-          <div>
-            <h1 className="text-base font-bold text-primary leading-tight">HelpDesk</h1>
-            <p className="text-[10px] uppercase tracking-widest text-slate-400 dark:text-dark-on-surface-variant font-bold">Enterprise Suite</p>
+      <div className="px-6 pt-6 pb-4"> <div className="flex items-center gap-3 mb-8"> <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center shadow-md shrink-0"> <Icon name="support_agent" size={20} className="text-white" /> </div> <div> <h1 className="text-base font-bold text-primary leading-tight">HelpDesk</h1> <p className="text-[10px] uppercase tracking-widest text-slate-400 dark:text-dark-on-surface-variant font-bold">Enterprise Suite</p>
           </div>
         </div>
 
@@ -59,7 +52,7 @@ export default function SideNav() {
                       className={[
                         'w-full rounded-lg px-3 py-2.5 flex items-center gap-3 text-sm transition-colors',
                         active
-                          ? 'bg-primary/10 dark:bg-dark-primary/10 text-primary dark:text-dark-primary font-semibold'
+                          ? 'bg-primary/10 text-primary font-semibold'
                           : 'text-slate-600 dark:text-dark-on-surface hover:bg-slate-50 dark:hover:bg-dark-surface-container-high font-medium',
                       ].join(' ')}
                     >
@@ -67,7 +60,7 @@ export default function SideNav() {
                       <span className="flex-1 text-left">{route.label}</span>
                       {route.badge != null && (
                         <span className={`text-xs px-1.5 py-0.5 rounded-full font-bold ${
-                          active ? 'bg-primary dark:bg-dark-primary text-white dark:text-dark-on-primary' : 'bg-slate-200 dark:bg-dark-surface-container-high text-slate-600 dark:text-dark-on-surface-variant'
+                          active ? 'bg-primary text-white dark:text-dark-on-primary' : 'bg-slate-200 dark:bg-dark-surface-container-high text-slate-600 dark:text-dark-on-surface-variant'
                         }`}>
                           {route.badge}
                         </span>

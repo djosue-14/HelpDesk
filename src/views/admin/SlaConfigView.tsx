@@ -4,6 +4,7 @@ import { slaConfigurationService } from '@api/services'
 import Button from '@/components/shared/Button'
 import Card from '@/components/shared/Card'
 import PriorityChip from '@/components/shared/PriorityChip'
+import { TextField } from '@/components/shared/TextField'
 import type { TicketPriority } from '@t/enums'
 
 const INITIAL_RESP: Record<TicketPriority, string> = {
@@ -24,35 +25,22 @@ export default function SlaConfigView() {
   })
 
   return (
-    <div className="max-w-4xl space-y-6">
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-wider text-secondary mb-1">Configuración</p>
-          <h1 className="text-[32px] leading-10 font-semibold text-on-surface">SLA y reglas de operación</h1>
-        </div>
-        <Button leading="save">Guardar cambios</Button>
-      </div>
-
-      <Card>
-        <h3 className="text-base font-semibold text-on-surface mb-5">Tiempos por prioridad</h3>
-        <div className="grid grid-cols-4 gap-4">
+    <div className="max-w-4xl space-y-6"> <div className="flex items-start justify-between"> <div> <p className="text-xs font-bold uppercase tracking-wider text-secondary mb-1">Configuración</p> <h1 className="text-[32px] leading-10 font-semibold text-on-surface">SLA y reglas de operación</h1> </div> <Button leading="save">Guardar cambios</Button> </div> <Card> <h3 className="text-base font-semibold text-on-surface mb-5">Tiempos por prioridad</h3> <div className="grid grid-cols-4 gap-4">
           {slaConfigs.map(cfg => {
             const prio = cfg.priority as TicketPriority
             return (
-              <div key={cfg.slaConfigurationId} className="bg-surface-container dark:bg-dark-surface-container rounded-xl p-4 space-y-3">
+              <div key={cfg.slaConfigurationId} className="bg-surface-container rounded-xl p-4 space-y-3">
                 <PriorityChip id={prio} />
                 {[
                   { label: 'Resp. inicial', value: INITIAL_RESP[prio] ?? '—' },
                   { label: 'Resolución',    value: `${cfg.hoursLimit} h`      },
                   { label: 'Umbral ámbar',  value: AMBER_THR[prio] ?? '70%'  },
                 ].map(({ label, value }) => (
-                  <div key={label}>
-                    <label className="text-xs font-medium text-on-surface-variant dark:text-dark-on-surface-variant">{label}</label>
-                    <input
-                      className="mt-1 w-full border border-slate-200 dark:border-dark-outline-variant rounded-lg px-3 py-1.5 text-sm text-on-surface dark:text-dark-on-surface focus:outline-none focus:border-primary dark:focus:border-dark-primary bg-white dark:bg-dark-surface-container-low"
-                      defaultValue={value}
-                    />
-                  </div>
+                  <TextField
+                    key={label}
+                    label={label}
+                    defaultValue={value}
+                  />
                 ))}
               </div>
             )
@@ -61,8 +49,7 @@ export default function SlaConfigView() {
       </Card>
 
       <Card>
-        <h3 className="text-base font-semibold text-on-surface mb-5">Reglas globales</h3>
-        <div className="space-y-5">
+        <h3 className="text-base font-semibold text-on-surface mb-5">Reglas globales</h3> <div className="space-y-5">
           {[
             { checked: autoEsc, onChange: setAutoEsc,
               title: 'Escalación automática al 80% del SLA',
@@ -74,12 +61,9 @@ export default function SlaConfigView() {
               title: 'Contar sólo horas hábiles (L–V, 9:00–18:00)',
               desc: 'Útil para departamentos no operativos 24/7.' },
           ].map(({ checked, onChange, title, desc }) => (
-            <label key={title} className="flex items-start gap-3 cursor-pointer">
-              <input type="checkbox" checked={checked}
-                onChange={e => onChange(e.target.checked)} className="mt-1 accent-primary" />
-              <div>
-                <p className="text-sm font-semibold text-on-surface dark:text-dark-on-surface">{title}</p>
-                <p className="text-xs text-on-surface-variant dark:text-dark-on-surface-variant mt-0.5">{desc}</p>
+            <label key={title} className="flex items-start gap-3 cursor-pointer"> <input type="checkbox" checked={checked}
+                onChange={e => onChange(e.target.checked)} className="mt-1 accent-primary" /> <div> <p className="text-sm font-semibold text-on-surface">{title}</p>
+                <p className="text-xs text-on-surface-variant mt-0.5">{desc}</p>
               </div>
             </label>
           ))}
@@ -87,16 +71,8 @@ export default function SlaConfigView() {
       </Card>
 
       <Card>
-        <h3 className="text-base font-semibold text-on-surface mb-4">Calendario de no-laborales</h3>
-        <div className="flex flex-wrap gap-2">
+        <h3 className="text-base font-semibold text-on-surface mb-4">Calendario de no-laborales</h3> <div className="flex flex-wrap gap-2">
           {['1 ene · Año Nuevo','21 mar · Benemérito Juárez','1 may · Trabajo','16 sep · Independencia','20 nov · Revolución','25 dic · Navidad'].map(d => (
             <span key={d} className="px-3 py-1.5 rounded-full text-xs font-medium bg-primary text-white">{d}</span>
           ))}
-          <button className="px-3 py-1.5 rounded-full text-xs font-medium border border-dashed border-outline-variant dark:border-dark-outline-variant text-on-surface-variant dark:text-dark-on-surface-variant hover:bg-surface-container dark:hover:bg-dark-surface-container">
-            + Añadir fecha
-          </button>
-        </div>
-      </Card>
-    </div>
-  )
-}
+          <button className="px-3 py-1.5 rounded-full text-xs font-medium border border-dashed border-outline-variant text-on-surface-variant hover:bg-surface-container"> + Añadir fecha </button> </div> </Card> </div> )}

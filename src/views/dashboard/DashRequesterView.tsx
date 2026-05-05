@@ -44,15 +44,13 @@ function MyTicketRow({ t }: { t: TicketSummaryDto }) {
   return (
     <div
       onClick={() => navigate(`/tickets/${t.ticketId}`)}
-      className="grid gap-4 items-center p-4 bg-white dark:bg-dark-surface-container border border-slate-200 dark:border-dark-outline-variant rounded-xl cursor-pointer hover:border-primary/30 dark:hover:border-dark-primary/30 hover:shadow-sm transition-all"
+      className="grid gap-4 items-center p-4 bg-white dark:bg-dark-surface-container border border-slate-200 dark:border-dark-outline-variant rounded-xl cursor-pointer hover:border-primary/30 hover:shadow-sm transition-all"
       style={{ gridTemplateColumns: '130px 1fr auto auto' }}
     >
-      <div className="flex flex-col gap-1">
-        <span className="font-mono text-xs font-bold text-primary">HD-{t.ticketNumber}</span>
+      <div className="flex flex-col gap-1"> <span className="font-mono text-xs font-bold text-primary">HD-{t.ticketNumber}</span>
         <StatusChip id={t.status} />
       </div>
-      <div className="min-w-0">
-        <p className="text-sm font-semibold text-on-surface truncate">{t.subject}</p>
+      <div className="min-w-0"> <p className="text-sm font-semibold text-on-surface truncate">{t.subject}</p>
         <p className="text-xs text-on-surface-variant mt-0.5">{t.departmentName} · {t.supportTypeName}</p>
       </div>
       <PriorityChip id={t.priority} />
@@ -86,23 +84,18 @@ export default function DashRequester({ role, onCreate }: Props) {
   return (
     <div className="max-w-5xl mx-auto space-y-8">
       {/* Page header */}
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-wider text-secondary mb-1">Mi panel</p>
-          <h1 className="text-[32px] leading-10 font-semibold text-on-surface">Hola, {role.user.name.split(' ')[0]}</h1>
+      <div className="flex items-start justify-between"> <div> <p className="text-xs font-bold uppercase tracking-wider text-secondary mb-1">Mi panel</p> <h1 className="text-[32px] leading-10 font-semibold text-on-surface">Hola, {role.user.name.split(' ')[0]}</h1>
           <p className="text-sm text-on-surface-variant mt-1">
             Tienes {open.length} ticket{open.length === 1 ? '' : 's'} en seguimiento.
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <Button variant="outlined" leading="history" onClick={() => navigate('/tickets')}>Ver historial</Button>
+        <div className="flex items-center gap-3"> <Button variant="outlined" leading="history" onClick={() => navigate('/tickets')}>Ver historial</Button>
           <Button leading="add" onClick={onCreate}>Nuevo ticket</Button>
         </div>
       </div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-3 gap-5">
-        <KpiCard icon="confirmation_number" label="En seguimiento" value={open.length}
+      <div className="grid grid-cols-3 gap-5"> <KpiCard icon="confirmation_number" label="En seguimiento" value={open.length}
           hint={`${open.filter(t => t.status === 'Open').length} abiertos · ${open.filter(t => t.status === 'Paused').length} esperando info.`} />
         <KpiCard icon="check_circle" label="Cerrados" value={closed.length} />
         <KpiCard icon="workspace_premium" label="Mis puntos" value={points.toLocaleString('es')}
@@ -112,10 +105,7 @@ export default function DashRequester({ role, onCreate }: Props) {
 
       {/* Rate banner for recently closed tickets */}
       {closed.length > 0 && (
-        <div className="flex items-center gap-4 p-5 rounded-xl bg-tertiary-container/20 border border-tertiary-container/30">
-          <Icon name="reviews" size={28} fill={1} className="text-tertiary shrink-0" />
-          <div className="flex-1">
-            <p className="text-sm font-semibold text-on-surface">
+        <div className="flex items-center gap-4 p-5 rounded-xl bg-tertiary-container/20 border border-tertiary-container/30"> <Icon name="reviews" size={28} fill={1} className="text-tertiary shrink-0" /> <div className="flex-1"> <p className="text-sm font-semibold text-on-surface">
               Tienes {closed.length} ticket{closed.length > 1 ? 's' : ''} cerrado{closed.length > 1 ? 's' : ''} — ¿ya los calificaste?
             </p>
             <p className="text-xs text-on-surface-variant">Califica para sumar puntos y ayudar al equipo de soporte.</p>
@@ -126,9 +116,7 @@ export default function DashRequester({ role, onCreate }: Props) {
 
       {/* Active tickets */}
       <section>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-on-surface">Mis tickets activos</h2>
-          <Button variant="text" trailing="arrow_forward" onClick={() => navigate('/tickets')}>Ver todos</Button>
+        <div className="flex items-center justify-between mb-4"> <h2 className="text-lg font-semibold text-on-surface">Mis tickets activos</h2> <Button variant="text" trailing="arrow_forward" onClick={() => navigate('/tickets')}>Ver todos</Button>
         </div>
         <div className="space-y-3">
           {open.map(t => <MyTicketRow key={t.ticketId} t={t} />)}
@@ -142,34 +130,21 @@ export default function DashRequester({ role, onCreate }: Props) {
       </section>
 
       {/* Score + Guide */}
-      <div className="grid grid-cols-2 gap-6">
-        <Card>
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-300">
-              <Icon name="workspace_premium" size={22} fill={1} />
+      <div className="grid grid-cols-2 gap-6"> <Card> <div className="flex items-center gap-3 mb-4"> <div className="w-10 h-10 rounded-full flex items-center justify-center bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-300"> <Icon name="workspace_premium" size={22} fill={1} />
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-secondary">Reputación</p>
-              <p className="text-lg font-semibold text-on-surface">Nivel {level}</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-secondary">Reputación</p> <p className="text-lg font-semibold text-on-surface">Nivel {level}</p>
               <p className="text-xs text-on-surface-variant">{points.toLocaleString('es')} puntos acumulados</p>
             </div>
           </div>
           <div className="space-y-2">
             {(score?.scoreTransactions ?? []).slice(0, 3).map(tx => (
-              <div key={tx.scoreTransactionId} className="flex items-center gap-2 text-xs">
-                <span className="text-green-600 dark:text-green-400 font-bold shrink-0">+{tx.points}</span>
+              <div key={tx.scoreTransactionId} className="flex items-center gap-2 text-xs"> <span className="text-green-600 dark:text-green-400 font-bold shrink-0">+{tx.points}</span>
                 <span className="flex-1 text-on-surface-variant truncate">{tx.reason}</span>
               </div>
             ))}
             {!score?.scoreTransactions?.length && (
-              <p className="text-xs text-on-surface-variant">Sin transacciones recientes.</p>
-            )}
-          </div>
-        </Card>
-
-        <Card>
-          <h3 className="text-base font-semibold text-on-surface mb-4">Cómo ganar más puntos</h3>
-          <ul className="space-y-3">
+              <p className="text-xs text-on-surface-variant">Sin transacciones recientes.</p> )} </div> </Card> <Card> <h3 className="text-base font-semibold text-on-surface mb-4">Cómo ganar más puntos</h3> <ul className="space-y-3">
             {[
               { i: 'edit_document', t: 'Describir bien tu problema',  s: '+10 pts cuando tu ticket no requiere repreguntar.' },
               { i: 'reviews',       t: 'Calificar tickets cerrados',   s: '+15 pts por cada calificación con comentario.'    },
@@ -177,9 +152,7 @@ export default function DashRequester({ role, onCreate }: Props) {
               { i: 'timer',         t: 'Responder a tiempo',           s: '+10 pts si respondes en menos de 4 h.'           },
             ].map((r, i) => (
               <li key={i} className="flex items-start gap-3">
-                <Icon name={r.i} size={18} className="text-primary mt-0.5 shrink-0" />
-                <div>
-                  <p className="text-sm font-semibold text-on-surface">{r.t}</p>
+                <Icon name={r.i} size={18} className="text-primary mt-0.5 shrink-0" /> <div> <p className="text-sm font-semibold text-on-surface">{r.t}</p>
                   <p className="text-xs text-on-surface-variant">{r.s}</p>
                 </div>
               </li>
