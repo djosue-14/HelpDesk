@@ -5,11 +5,9 @@ import { useAuthContext } from '@hooks/useAuthContext'
 import { ticketService } from '@api/services'
 import { hdGetPersonByUsername } from '@data/seed'
 import Avatar from '@/components/shared/Avatar'
-import StatusChip from '@/components/shared/StatusChip'
-import PriorityChip from '@/components/shared/PriorityChip'
+import { Chip, StatusChip, PriorityChip } from '@components/shared/Chip'
 import SlaTraffic from '@/components/shared/SlaTraffic'
 import SlaBar from '@/components/shared/SlaBar'
-import Chip from '@/components/shared/Chip'
 import { Table } from '@components/shared/Table'
 import type { ColumnDef } from '@components/shared/Table'
 import { Select } from '@components/shared/Select'
@@ -229,47 +227,49 @@ export default function Tickets({ role, query = '', scope = 'all' }: Props) {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-dark-surface-container rounded-xl border border-slate-100 dark:border-dark-outline-variant shadow-sm p-4 flex flex-wrap items-center gap-2">
-        <Chip selected={statusF === 'all'} onClick={() => setStatusF('all')}>
-          Todos · {counts.all}
-        </Chip>
-        {STATUSES.map(s => (
-          <Chip key={s.id} selected={statusF === s.id} leading={s.icon} onClick={() => setStatusF(s.id)}>
-            {s.name} · {counts[s.id] ?? 0}
+      <div className="bg-white dark:bg-dark-surface-container rounded-xl border border-slate-100 dark:border-dark-outline-variant shadow-sm">
+        <div className="flex flex-wrap items-center gap-2 px-4 pt-4 pb-3">
+          <Chip selected={statusF === 'all'} onClick={() => setStatusF('all')}>
+            Todos · {counts.all}
           </Chip>
-        ))}
-        <span className="flex-1" />
-        <Autocomplete
-          size="sm"
-          placeholder="Departamento"
-          value={deptF === 'all' ? null : deptF}
-          onChange={(v) => setDeptF(v !== null ? String(v) : 'all')}
-          options={depts.map(d => ({ value: d, label: d }))}
-          className="w-52"
-        />
-        <Select
-          size="sm"
-          placeholder="Todas las prioridades"
-          value={prioF}
-          onChange={(v) => setPrioF(v as TicketPriority | 'all')}
-          options={[
-            { value: 'all', label: 'Todas las prioridades' },
-            ...PRIORITIES.map(p => ({ value: p.id, label: p.name })),
-          ]}
-        />
-        <Select
-          size="sm"
-          placeholder="SLA — Cualquiera"
-          value={slaF}
-          onChange={(v) => setSlaF(String(v))}
-          options={[
-            { value: 'all', label: 'SLA — Cualquiera' },
-            { value: 'green', label: 'Verde' },
-            { value: 'yellow', label: 'Ámbar' },
-            { value: 'red', label: 'Rojo' },
-            { value: 'paused', label: 'Pausado' },
-          ]}
-        />
+          {STATUSES.map(s => (
+            <Chip key={s.id} selected={statusF === s.id} leading={s.icon} onClick={() => setStatusF(s.id)}>
+              {s.name} · {counts[s.id] ?? 0}
+            </Chip>
+          ))}
+        </div>
+        <div className="grid grid-cols-3 gap-2 px-4 pb-4 pt-3 border-t border-slate-100 dark:border-dark-outline-variant/40">
+          <Autocomplete
+            size="sm"
+            placeholder="Departamento"
+            value={deptF === 'all' ? null : deptF}
+            onChange={(v) => setDeptF(v !== null ? String(v) : 'all')}
+            options={depts.map(d => ({ value: d, label: d }))}
+          />
+          <Select
+            size="sm"
+            placeholder="Todas las prioridades"
+            value={prioF}
+            onChange={(v) => setPrioF(v as TicketPriority | 'all')}
+            options={[
+              { value: 'all', label: 'Todas las prioridades' },
+              ...PRIORITIES.map(p => ({ value: p.id, label: p.name })),
+            ]}
+          />
+          <Select
+            size="sm"
+            placeholder="SLA — Cualquiera"
+            value={slaF}
+            onChange={(v) => setSlaF(String(v))}
+            options={[
+              { value: 'all', label: 'SLA — Cualquiera' },
+              { value: 'green', label: 'Verde' },
+              { value: 'yellow', label: 'Ámbar' },
+              { value: 'red', label: 'Rojo' },
+              { value: 'paused', label: 'Pausado' },
+            ]}
+          />
+        </div>
       </div>
 
       <Table<TicketSummaryDto>

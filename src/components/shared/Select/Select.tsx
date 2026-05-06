@@ -160,7 +160,7 @@ export default function Select({
                   anchor="bottom start"
                   className={[
                     'z-50 w-[var(--button-width)] min-w-max',
-                    'bg-white dark:bg-surface-container',
+                    'bg-white dark:bg-surface-container text-on-surface',
                     'rounded-lg py-2',
                     'shadow-lg border border-outline-variant/20',
                     'focus:outline-none',

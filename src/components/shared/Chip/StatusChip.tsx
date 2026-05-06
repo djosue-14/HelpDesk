@@ -1,4 +1,4 @@
-import Icon from './Icon'
+import Icon from '@components/shared/Icon'
 
 const CONFIG: Record<string, { label: string; icon: string; cls: string }> = {
   // API values (TicketStatus)

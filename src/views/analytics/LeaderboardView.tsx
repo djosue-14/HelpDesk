@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { dashboardService } from '@api/services'
 import { hdGetPersonByUsername } from '@data/seed'
-import Card from '@/components/shared/Card'
+import { Card } from '@/components/shared/Card'
 import Avatar from '@/components/shared/Avatar'
 import { Stars } from '@/components/shared/Stars'
+import { PageHeader } from '@components/shared/PageHeader'
 
 const MEDAL = (r: number) =>
   r === 1 ? 'bg-amber-100 text-amber-600 border-amber-300 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-700/50' :
@@ -35,16 +36,28 @@ export default function LeaderboardView() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-24 text-on-surface-variant text-sm">Cargando ranking…</div> ) } return ( <div className="max-w-4xl mx-auto space-y-8"> <div className="flex items-start justify-between"> <div> <p className="text-xs font-bold uppercase tracking-wider text-secondary mb-1">Ranking</p> <h1 className="text-[32px] leading-10 font-semibold text-on-surface capitalize">Top agentes — {monthLabel}</h1>
-          <p className="text-sm text-on-surface-variant mt-1">Puntos = tickets cerrados · cumplimiento SLA · calificación promedio.</p> </div> <div className="flex items-center rounded-lg border border-slate-200 dark:border-dark-outline-variant overflow-hidden text-sm bg-white dark:bg-dark-surface-container">
-          {[['week','Semana'],['month','Mes'],['quarter','Trimestre']].map(([k,l]) => (
-            <button key={k} onClick={() => setPeriod(k)}
-              className={`px-4 py-2 font-medium transition-colors ${period === k ? 'bg-primary text-white dark:text-dark-on-primary' : 'text-slate-600 dark:text-dark-on-surface-variant hover:bg-slate-50 dark:hover:bg-dark-surface-container-high'}`}>
-              {l}
-            </button>
-          ))}
-        </div>
-      </div>
+      <div className="flex items-center justify-center py-24 text-on-surface-variant text-sm">Cargando ranking…</div>
+    )
+  }
+
+  return (
+    <div className="max-w-4xl mx-auto space-y-8">
+      <PageHeader
+        label="Ranking"
+        title={`Top agentes — ${monthLabel}`}
+        titleClassName="capitalize"
+        description="Puntos = tickets cerrados · cumplimiento SLA · calificación promedio."
+        actions={
+          <div className="flex items-center rounded-lg border border-slate-200 dark:border-dark-outline-variant overflow-hidden text-sm bg-white dark:bg-dark-surface-container">
+            {[['week','Semana'],['month','Mes'],['quarter','Trimestre']].map(([k,l]) => (
+              <button key={k} onClick={() => setPeriod(k)}
+                className={`px-4 py-2 font-medium transition-colors ${period === k ? 'bg-primary text-white dark:text-dark-on-primary' : 'text-slate-600 dark:text-dark-on-surface-variant hover:bg-slate-50 dark:hover:bg-dark-surface-container-high'}`}>
+                {l}
+              </button>
+            ))}
+          </div>
+        }
+      />
 
       {/* Podium */}
       <div className="grid grid-cols-3 gap-4 items-end">

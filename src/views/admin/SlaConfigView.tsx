@@ -2,8 +2,10 @@ import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { slaConfigurationService } from '@api/services'
 import Button from '@/components/shared/Button'
-import Card from '@/components/shared/Card'
-import PriorityChip from '@/components/shared/PriorityChip'
+import { Card } from '@/components/shared/Card'
+import { PageHeader } from '@components/shared/PageHeader'
+import { Toggle } from '@/components/shared/Toggle'
+import { PriorityChip } from '@components/shared/Chip'
 import { TextField } from '@/components/shared/TextField'
 import type { TicketPriority } from '@t/enums'
 
@@ -25,7 +27,13 @@ export default function SlaConfigView() {
   })
 
   return (
-    <div className="max-w-4xl space-y-6"> <div className="flex items-start justify-between"> <div> <p className="text-xs font-bold uppercase tracking-wider text-secondary mb-1">Configuración</p> <h1 className="text-[32px] leading-10 font-semibold text-on-surface">SLA y reglas de operación</h1> </div> <Button leading="save">Guardar cambios</Button> </div> <Card> <h3 className="text-base font-semibold text-on-surface mb-5">Tiempos por prioridad</h3> <div className="grid grid-cols-4 gap-4">
+    <div className="max-w-4xl space-y-6">
+      <PageHeader
+        label="Configuración"
+        title="SLA y reglas de operación"
+        actions={<Button leading="save">Guardar cambios</Button>}
+      />
+      <Card> <h3 className="text-base font-semibold text-on-surface mb-5">Tiempos por prioridad</h3> <div className="grid grid-cols-4 gap-4">
           {slaConfigs.map(cfg => {
             const prio = cfg.priority as TicketPriority
             return (
@@ -51,21 +59,17 @@ export default function SlaConfigView() {
       <Card>
         <h3 className="text-base font-semibold text-on-surface mb-5">Reglas globales</h3> <div className="space-y-5">
           {[
-            { checked: autoEsc, onChange: setAutoEsc,
+            { checked: autoEsc,      onChange: setAutoEsc,
               title: 'Escalación automática al 80% del SLA',
-              desc: 'Notifica al coordinador del departamento cuando un ticket alcanza el umbral.' },
+              desc:  'Notifica al coordinador del departamento cuando un ticket alcanza el umbral.' },
             { checked: pauseWaiting, onChange: setPauseWaiting,
               title: 'Pausar SLA cuando el ticket esté «Esperando información»',
-              desc: 'El cronómetro se reanuda al recibir respuesta del solicitante.' },
-            { checked: bizOnly, onChange: setBizOnly,
+              desc:  'El cronómetro se reanuda al recibir respuesta del solicitante.' },
+            { checked: bizOnly,      onChange: setBizOnly,
               title: 'Contar sólo horas hábiles (L–V, 9:00–18:00)',
-              desc: 'Útil para departamentos no operativos 24/7.' },
+              desc:  'Útil para departamentos no operativos 24/7.' },
           ].map(({ checked, onChange, title, desc }) => (
-            <label key={title} className="flex items-start gap-3 cursor-pointer"> <input type="checkbox" checked={checked}
-                onChange={e => onChange(e.target.checked)} className="mt-1 accent-primary" /> <div> <p className="text-sm font-semibold text-on-surface">{title}</p>
-                <p className="text-xs text-on-surface-variant mt-0.5">{desc}</p>
-              </div>
-            </label>
+            <Toggle key={title} checked={checked} onChange={onChange} label={title} description={desc} />
           ))}
         </div>
       </Card>

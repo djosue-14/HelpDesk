@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 import { dashboardService } from '@api/services'
 import Button from '@/components/shared/Button'
-import Card from '@/components/shared/Card'
+import { Card } from '@/components/shared/Card'
 import Icon from '@/components/shared/Icon'
+import { PageHeader } from '@components/shared/PageHeader'
 import { heatColor, heatTextColor } from '@/components/shared/Donut'
 
 export default function HeatmapView() {
@@ -20,17 +21,17 @@ export default function HeatmapView() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-wider text-secondary mb-1">Análisis</p>
-          <h1 className="text-[32px] leading-10 font-semibold text-on-surface">Mapa de calor — Departamento × Tipo</h1>
-          <p className="text-sm text-on-surface-variant mt-1">Distribución de tickets activos. Pasa el cursor para ver el detalle.</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <Button variant="outlined" leading="calendar_today">Últimos 30 días</Button>
-          <Button variant="outlined" leading="download">Exportar</Button>
-        </div>
-      </div>
+      <PageHeader
+        label="Análisis"
+        title="Mapa de calor — Departamento × Tipo"
+        description="Distribución de tickets activos. Pasa el cursor para ver el detalle."
+        actions={
+          <>
+            <Button variant="outlined" leading="calendar_today">Últimos 30 días</Button>
+            <Button variant="outlined" leading="download">Exportar</Button>
+          </>
+        }
+      />
 
       <Card>
         {isLoading ? (

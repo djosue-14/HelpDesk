@@ -6,12 +6,12 @@ import { ticketCommentService } from '@api/services'
 import { hdGetPersonByUsername, HD_HISTORY } from '@data/seed'
 import Avatar from '@/components/shared/Avatar'
 import Button from '@/components/shared/Button'
-import Card from '@/components/shared/Card'
+import { Card } from '@/components/shared/Card'
 import Icon from '@/components/shared/Icon'
-import StatusChip from '@/components/shared/StatusChip'
-import PriorityChip from '@/components/shared/PriorityChip'
+import { StatusChip, PriorityChip } from '@components/shared/Chip'
 import SlaTraffic from '@/components/shared/SlaTraffic'
 import SlaBar from '@/components/shared/SlaBar'
+import { Tabs } from '@/components/shared/Tabs'
 import {
   CloseTicketDialog,
   RedirectDialog,
@@ -179,23 +179,16 @@ export default function TicketDetail({ role }: Props) {
         {/* Main grid */}
         <div className="grid gap-6" style={{ gridTemplateColumns: '1fr 300px' }}>
           {/* Left: tabs + content */}
-          <div className="space-y-4"> <div className="flex border-b border-slate-200 dark:border-dark-outline-variant">
-              {([
-                ['thread', 'forum', `Conversación (${allComments.length})`],
-                ['history', 'history', 'Historial'],
-                ['attachments', 'attach_file', `Adjuntos (${ticket.attachments?.length ?? 0})`],
-              ] as [Tab, string, string][]).map(([id, icon, label]) => (
-                <button key={id} onClick={() => setTab(id)}
-                  className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
-                    tab === id
-                      ? 'border-primary text-primary'
-                      : 'border-transparent text-slate-500 dark:text-dark-on-surface-variant hover:text-on-surface'
-                  }`}>
-                  <Icon name={icon} size={16} />
-                  {label}
-                </button>
-              ))}
-            </div>
+          <div className="space-y-4">
+            <Tabs
+              value={tab}
+              onChange={(id) => setTab(id as Tab)}
+              tabs={[
+                { id: 'thread',      icon: 'forum',       label: `Conversación (${allComments.length})` },
+                { id: 'history',     icon: 'history',     label: 'Historial' },
+                { id: 'attachments', icon: 'attach_file', label: `Adjuntos (${ticket.attachments?.length ?? 0})` },
+              ]}
+            />
 
             {/* Thread tab */}
             {tab === 'thread' && (

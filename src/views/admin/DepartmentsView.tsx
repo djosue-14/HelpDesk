@@ -4,8 +4,10 @@ import { departmentService, supportTypeService } from '@api/services'
 import { HD_DEPARTMENTS } from '@data/seed'
 import Button from '@/components/shared/Button'
 import Icon from '@/components/shared/Icon'
+import { PageHeader } from '@components/shared/PageHeader'
 import { Table } from '@components/shared/Table'
 import type { ColumnDef } from '@components/shared/Table'
+import { Toggle } from '@components/shared/Toggle'
 import type { DepartmentDto } from '@t/dtos'
 
 export default function CatalogDepartments() {
@@ -77,18 +79,9 @@ export default function CatalogDepartments() {
       accessorKey: 'isEnabled',
       header: 'Estado',
       enableSorting: false,
-      cell: ({ getValue }) => {
-        const active = getValue<boolean>()
-        return (
-          <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${
-            active
-              ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-              : 'bg-surface-container-high text-on-surface-variant'
-          }`}>
-            {active ? 'Activo' : 'Inactivo'}
-          </span>
-        )
-      },
+      cell: ({ getValue }) => (
+        <Toggle checked={getValue<boolean>()} />
+      ),
     },
     {
       id: 'actions',
@@ -103,13 +96,11 @@ export default function CatalogDepartments() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-wider text-secondary mb-1">Catálogo</p>
-          <h1 className="text-[32px] leading-10 font-semibold text-on-surface">Departamentos</h1>
-        </div>
-        <Button leading="add">Nuevo departamento</Button>
-      </div>
+      <PageHeader
+        label="Catálogo"
+        title="Departamentos"
+        actions={<Button leading="add">Nuevo departamento</Button>}
+      />
 
       <Table<DepartmentDto>
         data={isLoading ? [] : departments}

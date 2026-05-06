@@ -182,7 +182,7 @@ const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
        */
       <div className={`w-full relative ${className}`}>
         <Combobox
-          value={value ?? ''}
+          value={value != null ? String(value) : ''}
           onChange={(v: unknown) => {
             setQuery('')
             onChange?.(v as string | number)
@@ -302,12 +302,14 @@ const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                 )}
               </div>
 
-              {/* ── Dropdown — absolute w-full of outer `relative` wrapper ── */}
+              {/* ── Dropdown — portal via anchor, never clipped by parent overflow ── */}
               <ComboboxOptions
+                anchor="bottom"
                 className={[
-                  'absolute z-50 mt-1 w-full',
+                  'z-50 w-[var(--input-width)]',
+                  '[--anchor-gap:4px]',
                   'max-h-60 overflow-y-auto',
-                  'bg-white dark:bg-surface-container',
+                  'bg-white dark:bg-surface-container text-on-surface',
                   'rounded-lg py-2',
                   'shadow-lg border border-outline-variant/20',
                   'focus:outline-none',

@@ -5,11 +5,11 @@ import { ticketService } from '@api/services'
 import { scoreService } from '@api/services'
 import KpiCard from '@/components/shared/KpiCard'
 import Button from '@/components/shared/Button'
-import Card from '@/components/shared/Card'
+import { Card } from '@/components/shared/Card'
+import { PageHeader } from '@components/shared/PageHeader'
 import Icon from '@/components/shared/Icon'
 import EmptyState from '@/components/shared/EmptyState'
-import StatusChip from '@/components/shared/StatusChip'
-import PriorityChip from '@/components/shared/PriorityChip'
+import { StatusChip, PriorityChip } from '@components/shared/Chip'
 import SlaTraffic from '@/components/shared/SlaTraffic'
 import type { Role } from '@/data/types'
 import type { TicketSummaryDto } from '@t/dtos'
@@ -83,16 +83,17 @@ export default function DashRequester({ role, onCreate }: Props) {
 
   return (
     <div className="max-w-5xl mx-auto space-y-8">
-      {/* Page header */}
-      <div className="flex items-start justify-between"> <div> <p className="text-xs font-bold uppercase tracking-wider text-secondary mb-1">Mi panel</p> <h1 className="text-[32px] leading-10 font-semibold text-on-surface">Hola, {role.user.name.split(' ')[0]}</h1>
-          <p className="text-sm text-on-surface-variant mt-1">
-            Tienes {open.length} ticket{open.length === 1 ? '' : 's'} en seguimiento.
-          </p>
-        </div>
-        <div className="flex items-center gap-3"> <Button variant="outlined" leading="history" onClick={() => navigate('/tickets')}>Ver historial</Button>
-          <Button leading="add" onClick={onCreate}>Nuevo ticket</Button>
-        </div>
-      </div>
+      <PageHeader
+        label="Mi panel"
+        title={`Hola, ${role.user.name.split(' ')[0]}`}
+        description={`Tienes ${open.length} ticket${open.length === 1 ? '' : 's'} en seguimiento.`}
+        actions={
+          <>
+            <Button variant="outlined" leading="history" onClick={() => navigate('/tickets')}>Ver historial</Button>
+            <Button leading="add" onClick={onCreate}>Nuevo ticket</Button>
+          </>
+        }
+      />
 
       {/* KPIs */}
       <div className="grid grid-cols-3 gap-5"> <KpiCard icon="confirmation_number" label="En seguimiento" value={open.length}

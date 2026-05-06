@@ -5,12 +5,13 @@ import { ticketService } from '@api/services'
 import { dashboardService } from '@api/services'
 import KpiCard from '@/components/shared/KpiCard'
 import Button from '@/components/shared/Button'
-import Card from '@/components/shared/Card'
+import { Card } from '@/components/shared/Card'
 import Avatar from '@/components/shared/Avatar'
-import PriorityChip from '@/components/shared/PriorityChip'
+import { PriorityChip } from '@components/shared/Chip'
 import SlaTraffic from '@/components/shared/SlaTraffic'
 import SlaBar from '@/components/shared/SlaBar'
 import EmptyState from '@/components/shared/EmptyState'
+import { PageHeader } from '@components/shared/PageHeader'
 import { hdGetPersonByUsername } from '@data/seed'
 import type { Role } from '@/data/types'
 import type { TicketSummaryDto } from '@t/dtos'
@@ -92,20 +93,17 @@ export default function DashAgent({ role }: Props) {
 
   return (
     <div className="max-w-5xl mx-auto space-y-8">
-      {/* Header */}
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-wider text-secondary mb-1">Bandeja de agente</p>
-          <h1 className="text-[32px] leading-10 font-semibold text-on-surface">Buen día, {role.user.name.split(' ')[0]}</h1>
-          <p className="text-sm text-on-surface-variant mt-1">
-            {mine.length} ticket{mine.length === 1 ? '' : 's'} asignado{mine.length === 1 ? '' : 's'} · {breaching.length} en riesgo de SLA.
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          <Button variant="outlined" leading="filter_list" onClick={() => navigate('/queue')}>Cola del depto.</Button>
-          <Button variant="tonal" leading="leaderboard" onClick={() => navigate('/leaderboard')}>Mi ranking</Button>
-        </div>
-      </div>
+      <PageHeader
+        label="Bandeja de agente"
+        title={`Buen día, ${role.user.name.split(' ')[0]}`}
+        description={`${mine.length} ticket${mine.length === 1 ? '' : 's'} asignado${mine.length === 1 ? '' : 's'} · ${breaching.length} en riesgo de SLA.`}
+        actions={
+          <>
+            <Button variant="outlined" leading="filter_list" onClick={() => navigate('/queue')}>Cola del depto.</Button>
+            <Button variant="tonal" leading="leaderboard" onClick={() => navigate('/leaderboard')}>Mi ranking</Button>
+          </>
+        }
+      />
 
       {/* KPIs */}
       <div className="grid grid-cols-4 gap-5">

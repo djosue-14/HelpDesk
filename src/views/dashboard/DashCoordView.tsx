@@ -4,9 +4,9 @@ import { ticketService } from '@api/services'
 import { dashboardService } from '@api/services'
 import KpiCard from '@/components/shared/KpiCard'
 import Button from '@/components/shared/Button'
-import Card from '@/components/shared/Card'
-import StatusChip from '@/components/shared/StatusChip'
-import PriorityChip from '@/components/shared/PriorityChip'
+import { Card } from '@/components/shared/Card'
+import { PageHeader } from '@components/shared/PageHeader'
+import { StatusChip, PriorityChip } from '@components/shared/Chip'
 import SlaTraffic from '@/components/shared/SlaTraffic'
 import Donut from '@/components/shared/Donut'
 import type { Role } from '@/data/types'
@@ -105,18 +105,18 @@ export default function DashCoord({ isAdmin }: Props) {
 
   return (
     <div className="space-y-8">
-      {/* Header */}
-      <div className="flex items-start justify-between"> <div> <p className="text-xs font-bold uppercase tracking-wider text-secondary mb-1">
-            {isAdmin ? 'Vista de administración' : 'Vista de coordinación'}
-          </p>
-          <h1 className="text-[32px] leading-10 font-semibold text-on-surface">Operación HelpDesk</h1> <p className="text-sm text-on-surface-variant mt-1">
-            {isAdmin ? 'Resumen global de la mesa de servicio.' : 'Resumen del departamento de Tecnología.'}
-          </p>
-        </div>
-        <div className="flex items-center gap-3"> <Button variant="outlined" leading="download">Exportar</Button> <Button variant="tonal" leading="grid_on" onClick={() => navigate('/heatmap')}>Mapa de calor</Button>
-          <Button leading="monitoring" onClick={() => navigate('/metrics')}>Métricas</Button>
-        </div>
-      </div>
+      <PageHeader
+        label={isAdmin ? 'Vista de administración' : 'Vista de coordinación'}
+        title="Operación HelpDesk"
+        description={isAdmin ? 'Resumen global de la mesa de servicio.' : 'Resumen del departamento de Tecnología.'}
+        actions={
+          <>
+            <Button variant="outlined" leading="download">Exportar</Button>
+            <Button variant="tonal" leading="grid_on" onClick={() => navigate('/heatmap')}>Mapa de calor</Button>
+            <Button leading="monitoring" onClick={() => navigate('/metrics')}>Métricas</Button>
+          </>
+        }
+      />
 
       {/* KPIs */}
       <div className="grid grid-cols-4 gap-5"> <KpiCard icon="confirmation_number" label="Tickets totales" value={totalTickets} />

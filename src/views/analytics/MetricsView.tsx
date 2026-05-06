@@ -2,7 +2,8 @@ import { useQuery } from '@tanstack/react-query'
 import { dashboardService } from '@api/services'
 import { ticketService } from '@api/services'
 import Button from '@/components/shared/Button'
-import Card from '@/components/shared/Card'
+import { Card } from '@/components/shared/Card'
+import { PageHeader } from '@components/shared/PageHeader'
 import KpiCard from '@/components/shared/KpiCard'
 import Donut from '@/components/shared/Donut'
 import type { TicketStatus, TicketPriority } from '@t/enums'
@@ -51,7 +52,18 @@ export default function MetricsView() {
   )
 
   return (
-    <div className="space-y-8"> <div className="flex items-start justify-between"> <div> <p className="text-xs font-bold uppercase tracking-wider text-secondary mb-1">Métricas operativas</p> <h1 className="text-[32px] leading-10 font-semibold text-on-surface">Métricas de la mesa de servicio</h1> </div> <div className="flex items-center gap-3"> <Button variant="outlined" leading="calendar_today">Últimos 30 días</Button> <Button variant="outlined" leading="download">Exportar CSV</Button> </div> </div> <div className="grid grid-cols-4 gap-5"> <KpiCard icon="speed" label="Cumplimiento SLA" value={metrics ? `${metrics.slaCompliancePct.toFixed(1)}%` : '—'}
+    <div className="space-y-8">
+      <PageHeader
+        label="Métricas operativas"
+        title="Métricas de la mesa de servicio"
+        actions={
+          <>
+            <Button variant="outlined" leading="calendar_today">Últimos 30 días</Button>
+            <Button variant="outlined" leading="download">Exportar CSV</Button>
+          </>
+        }
+      />
+      <div className="grid grid-cols-4 gap-5"> <KpiCard icon="speed" label="Cumplimiento SLA" value={metrics ? `${metrics.slaCompliancePct.toFixed(1)}%` : '—'}
           iconBg="#D5F5DD" iconColor="#0E5C25" />
         <KpiCard icon="schedule" label="Tiempo medio resol." value={metrics ? `${metrics.avgResolutionHours.toFixed(1)} h` : '—'} />
         <KpiCard icon="timer" label="Primera respuesta" value={metrics ? `${metrics.avgFirstResponseHours.toFixed(1)} h` : '—'} />
