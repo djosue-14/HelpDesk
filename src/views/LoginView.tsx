@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
-import { USE_MOCK } from '@config'
+import { USE_MOCK_AUTH } from '@config'
 import { useAuthContext } from '@hooks/useAuthContext'
 import { getMockTokenForRole } from '@services/auth.service'
 import { HD_ROLES } from '@data/seed'
@@ -25,7 +25,7 @@ export default function LoginView() {
     login(token)
   }
 
-  if (!USE_MOCK) {
+  if (!USE_MOCK_AUTH) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-surface"> <div className="text-center"> <span className="material-symbols-outlined text-5xl text-primary mb-4 block">support_agent</span> <h1 className="text-2xl font-semibold text-on-surface mb-2">HelpDesk Enterprise</h1> <p className="text-on-surface-variant text-sm">Iniciando sesión con Windows Auth…</p> </div> </div> ) } return ( <div className="min-h-screen flex flex-col items-center justify-center bg-surface gap-8 p-8"> <div className="text-center"> <span className="material-symbols-outlined text-5xl text-primary block mb-2">support_agent</span> <h1 className="text-2xl font-bold text-on-surface">HelpDesk Enterprise</h1> <p className="text-sm text-on-surface-variant mt-1">Selecciona un perfil para continuar (modo demo)</p> </div> <div className="grid grid-cols-2 gap-4 w-full max-w-md">
         {HD_ROLES.map(role => (
@@ -44,4 +44,4 @@ export default function LoginView() {
         ))}
       </div>
 
-      <p className="text-xs text-on-surface-variant"> Para cambiar a API real: <code className="bg-surface-container px-1 rounded">VITE_USE_MOCK=false</code> </p> </div> )}
+      <p className="text-xs text-on-surface-variant"> Para desactivar mock auth: <code className="bg-surface-container px-1 rounded">VITE_USE_MOCK_AUTH=false</code> </p> </div> )}

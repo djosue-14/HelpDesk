@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Routes, Route, Navigate, useNavigate } from 'react-router'
 import { useAuthContext } from '@hooks/useAuthContext'
 import { useRouteContext } from '@hooks/useRouteContext'
-import { USE_MOCK } from '@config'
+import { USE_MOCK_AUTH } from '@config'
 import { getMockTokenForRole } from '@services/auth.service'
 import AppShell from '@/components/layout/AppShell'
 import type { Role } from '@/data/types'
@@ -35,7 +35,7 @@ export default function App() {
   const role = deriveRole(user?.role)
 
   function handleRoleChange(r: Role) {
-    if (USE_MOCK) {
+    if (USE_MOCK_AUTH) {
       const token = getMockTokenForRole(r.id)
       login(token)
     }

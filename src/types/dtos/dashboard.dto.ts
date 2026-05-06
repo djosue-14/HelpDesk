@@ -1,4 +1,5 @@
 import type { TicketSummaryDto } from './ticket.dto'
+import type { UserScoreDto } from './score.dto'
 
 export interface DailyVolumeDto {
   date: string
@@ -67,4 +68,39 @@ export interface LeaderboardDto {
   year: number
   month: number
   top10: LeaderboardEntryDto[] | null
+}
+
+export interface RequesterDashboardDto {
+  activeTickets: TicketSummaryDto[]
+  ticketCountByStatus: Record<string, number>
+  score: UserScoreDto | null
+}
+
+export interface AgentDashboardDto {
+  queue: TicketSummaryDto[]
+  totalAssigned: number
+  overdueCount: number
+  staleCount: number
+  workloadPct: number
+}
+
+export interface AgentWorkloadDto {
+  userId: string
+  assignedCount: number
+  overdueCount: number
+}
+
+export interface CoordinatorDashboardDto {
+  departmentName: string
+  totalActive: number
+  slaBreachedCount: number
+  teamWorkload: AgentWorkloadDto[]
+  escalatedTickets: TicketSummaryDto[]
+}
+
+export interface AdminDashboardDto {
+  totalActiveAllDepartments: number
+  slaDailyCompliancePct: number
+  countByPriority: Record<string, number>
+  countByDepartment: Record<string, number>
 }

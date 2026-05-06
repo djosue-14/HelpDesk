@@ -1,5 +1,3 @@
-import { USE_MOCK } from '@config'
-import * as mock from '@api/mocks/supportTypeAgentMock'
 import apiClient from '@api/client/apiClient'
 import { wrapResponse, wrapError } from '@t/ApiResponse'
 import type { ApiResponse } from '@t/ApiResponse'
@@ -8,28 +6,24 @@ import type { AssignAgentRequest } from '@t/requests'
 
 export const supportTypeAgentService = {
   getActive(supportTypeId: number): Promise<ApiResponse<SupportTypeAgentDto>> {
-    if (USE_MOCK) return mock.getActive(supportTypeId)
     return apiClient.get<SupportTypeAgentDto>(`/SupportTypeAgents/active/${supportTypeId}`)
       .then(r => wrapResponse(r.data))
       .catch(e => wrapError<SupportTypeAgentDto>(e))
   },
 
   getHistory(supportTypeId: number): Promise<ApiResponse<SupportTypeAgentDto[]>> {
-    if (USE_MOCK) return mock.getHistory(supportTypeId)
     return apiClient.get<SupportTypeAgentDto[]>(`/SupportTypeAgents/history/${supportTypeId}`)
       .then(r => wrapResponse(r.data))
       .catch(e => wrapError<SupportTypeAgentDto[]>(e))
   },
 
   assign(body: AssignAgentRequest): Promise<ApiResponse<SupportTypeAgentDto>> {
-    if (USE_MOCK) return mock.assign(body)
     return apiClient.post<SupportTypeAgentDto>('/SupportTypeAgents', body)
       .then(r => wrapResponse(r.data))
       .catch(e => wrapError<SupportTypeAgentDto>(e))
   },
 
   unassign(supportTypeId: number): Promise<ApiResponse<void>> {
-    if (USE_MOCK) return mock.unassign(supportTypeId)
     return apiClient.delete(`/SupportTypeAgents/${supportTypeId}`)
       .then(() => wrapResponse<void>(undefined))
       .catch(e => wrapError<void>(e))

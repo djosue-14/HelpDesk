@@ -1,8 +1,6 @@
 import { useNavigate } from 'react-router'
 import { useQuery } from '@tanstack/react-query'
-import { useAuthContext } from '@hooks/useAuthContext'
-import { ticketService } from '@api/services'
-import { scoreService } from '@api/services'
+import { dashboardService } from '@api/services'
 import KpiCard from '@/components/shared/KpiCard'
 import Button from '@/components/shared/Button'
 import { Card } from '@/components/shared/Card'
@@ -17,14 +15,14 @@ import type { TicketStatus } from '@t/enums'
 import type { SlaState } from '@/data/types'
 
 function getSlaState(remainingPct: number, status?: TicketStatus | null): SlaState {
-  if (status === 'Paused') return 'paused'
+  if (status === 'WaitingForInfo') return 'paused'
   if (remainingPct > 50) return 'green'
   if (remainingPct > 25) return 'yellow'
   return 'red'
 }
 
 function formatSlaLabel(deadline: string, status: TicketStatus | null | undefined): string {
-  if (status === 'Paused') return 'Pausado'
+  if (status === 'WaitingForInfo') return 'Pausado'
   const ms = new Date(deadline).getTime() - Date.now()
   if (ms <= 0) return 'Vencido'
   const hours = Math.floor(ms / 3600000)
@@ -61,25 +59,20 @@ function MyTicketRow({ t }: { t: TicketSummaryDto }) {
 
 export default function DashRequester({ role, onCreate }: Props) {
   const navigate = useNavigate()
-  const { user } = useAuthContext()
 
-  const { data: allTickets = [] } = useQuery({
-    queryKey: ['tickets'],
-    queryFn: () => ticketService.getAll().then(r => r.data ?? []),
+  const { data: dashboard } = useQuery({
+    queryKey: ['requester-dashboard'],
+    queryFn: () => dashboardService.getRequesterDashboard(),
+    select: (res) => res.data,
   })
 
-  const { data: score } = useQuery({
-    queryKey: ['score', user?.sub],
-    queryFn: () => scoreService.getUserScore(user!.sub).then(r => r.data),
-    enabled: !!user?.sub,
-  })
-
-  const myTickets = allTickets.filter(t => t.createdBy === user?.username)
-  const open = myTickets.filter(t => t.status !== 'Closed')
-  const closed = myTickets.filter(t => t.status === 'Closed')
+  const open        = dashboard?.activeTickets ?? []
+  const counts      = dashboard?.ticketCountByStatus ?? {}
+  const score       = dashboard?.score ?? null
+  const closedCount = counts['Closed'] ?? 0
 
   const points = score?.currentPoints ?? 0
-  const level = score?.level ?? '—'
+  const level  = score?.level ?? '—'
 
   return (
     <div className="max-w-5xl mx-auto space-y-8">
@@ -97,21 +90,21 @@ export default function DashRequester({ role, onCreate }: Props) {
 
       {/* KPIs */}
       <div className="grid grid-cols-3 gap-5"> <KpiCard icon="confirmation_number" label="En seguimiento" value={open.length}
-          hint={`${open.filter(t => t.status === 'Open').length} abiertos · ${open.filter(t => t.status === 'Paused').length} esperando info.`} />
-        <KpiCard icon="check_circle" label="Cerrados" value={closed.length} />
+          hint={`${counts['Open'] ?? 0} abiertos · ${counts['WaitingForInfo'] ?? 0} esperando info.`} />
+        <KpiCard icon="check_circle" label="Cerrados" value={closedCount} />
         <KpiCard icon="workspace_premium" label="Mis puntos" value={points.toLocaleString('es')}
           hint={`Nivel ${level}`}
           iconBg="#EDE8F5" iconColor="#6750A4" />
       </div>
 
       {/* Rate banner for recently closed tickets */}
-      {closed.length > 0 && (
+      {closedCount > 0 && (
         <div className="flex items-center gap-4 p-5 rounded-xl bg-tertiary-container/20 border border-tertiary-container/30"> <Icon name="reviews" size={28} fill={1} className="text-tertiary shrink-0" /> <div className="flex-1"> <p className="text-sm font-semibold text-on-surface">
-              Tienes {closed.length} ticket{closed.length > 1 ? 's' : ''} cerrado{closed.length > 1 ? 's' : ''} — ¿ya los calificaste?
+              Tienes {closedCount} ticket{closedCount > 1 ? 's' : ''} cerrado{closedCount > 1 ? 's' : ''} — ¿ya los calificaste?
             </p>
             <p className="text-xs text-on-surface-variant">Califica para sumar puntos y ayudar al equipo de soporte.</p>
           </div>
-          <Button onClick={() => navigate(`/tickets/${closed[0].ticketId}`)}>Calificar ahora</Button>
+          <Button onClick={() => navigate('/tickets')}>Calificar ahora</Button>
         </div>
       )}
 

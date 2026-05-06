@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router'
 import { useQuery } from '@tanstack/react-query'
 import { useAuthContext } from '@hooks/useAuthContext'
-import { ticketService } from '@api/services'
 import { dashboardService } from '@api/services'
 import KpiCard from '@/components/shared/KpiCard'
 import Button from '@/components/shared/Button'
@@ -19,14 +18,14 @@ import type { TicketStatus } from '@t/enums'
 import type { SlaState } from '@/data/types'
 
 function getSlaState(remainingPct: number, status?: TicketStatus | null): SlaState {
-  if (status === 'Paused') return 'paused'
+  if (status === 'WaitingForInfo') return 'paused'
   if (remainingPct > 50) return 'green'
   if (remainingPct > 25) return 'yellow'
   return 'red'
 }
 
 function formatSlaLabel(deadline: string, status: TicketStatus | null | undefined): string {
-  if (status === 'Paused') return 'Pausado'
+  if (status === 'WaitingForInfo') return 'Pausado'
   const ms = new Date(deadline).getTime() - Date.now()
   if (ms <= 0) return 'Vencido'
   const hours = Math.floor(ms / 3600000)
@@ -65,9 +64,10 @@ export default function DashAgent({ role }: Props) {
   const navigate = useNavigate()
   const { user } = useAuthContext()
 
-  const { data: allTickets = [] } = useQuery({
-    queryKey: ['tickets'],
-    queryFn: () => ticketService.getAll().then(r => r.data ?? []),
+  const { data: agentDash } = useQuery({
+    queryKey: ['agent-dashboard'],
+    queryFn: () => dashboardService.getAgentDashboard(),
+    select: (res) => res.data,
   })
 
   const { data: perf } = useQuery({
@@ -81,13 +81,13 @@ export default function DashAgent({ role }: Props) {
     queryFn: () => dashboardService.getLeaderboard().then(r => r.data),
   })
 
-  const mine = allTickets.filter(t => t.assignedAgentUsername === user?.username)
-  const active = mine.filter(t => t.status !== 'Closed')
-  const breaching = mine.filter(t =>
-    t.status !== 'Paused' && t.status !== 'Closed' && t.remainingSlaPct < 25
+  const queue = agentDash?.queue ?? []
+  const active = queue.filter(t => t.status !== 'Closed')
+  const breaching = queue.filter(t =>
+    t.status !== 'WaitingForInfo' && t.status !== 'Closed' && t.remainingSlaPct < 25
   )
 
-  const myRank = leaderboard?.top10?.find(e => e.userId === user?.username)
+  const myRank = leaderboard?.top10?.find(e => e.userId === user?.sub)
   const rank = myRank?.rank ?? '—'
   const avgRating = myRank?.ratingRatePct != null ? (myRank.ratingRatePct / 20).toFixed(1) : '—'
 
@@ -96,7 +96,7 @@ export default function DashAgent({ role }: Props) {
       <PageHeader
         label="Bandeja de agente"
         title={`Buen día, ${role.user.name.split(' ')[0]}`}
-        description={`${mine.length} ticket${mine.length === 1 ? '' : 's'} asignado${mine.length === 1 ? '' : 's'} · ${breaching.length} en riesgo de SLA.`}
+        description={`${agentDash?.totalAssigned ?? 0} ticket${(agentDash?.totalAssigned ?? 0) === 1 ? '' : 's'} asignado${(agentDash?.totalAssigned ?? 0) === 1 ? '' : 's'} · ${breaching.length} en riesgo de SLA.`}
         actions={
           <>
             <Button variant="outlined" leading="filter_list" onClick={() => navigate('/queue')}>Cola del depto.</Button>
@@ -107,7 +107,7 @@ export default function DashAgent({ role }: Props) {
 
       {/* KPIs */}
       <div className="grid grid-cols-4 gap-5">
-        <KpiCard icon="inbox" label="Asignados" value={mine.length} hint={`${active.length} activos`} />
+        <KpiCard icon="inbox" label="Asignados" value={agentDash?.totalAssigned ?? 0} hint={`${active.length} activos`} />
         <KpiCard icon="warning" label="En riesgo SLA" value={breaching.length}
           hint="Atender en las próximas horas" iconBg="#FFDAD6" iconColor="#93000A" />
         <KpiCard icon="check_circle" label="Cerrados (mes)" value={perf?.totalClosed ?? '—'} />

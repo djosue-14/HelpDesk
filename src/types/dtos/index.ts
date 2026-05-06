@@ -16,4 +16,9 @@ export type {
   LeaderboardDto,
   LeaderboardEntryDto,
   DailyVolumeDto,
+  RequesterDashboardDto,
+  AgentDashboardDto,
+  AgentWorkloadDto,
+  CoordinatorDashboardDto,
+  AdminDashboardDto,
 } from './dashboard.dto'

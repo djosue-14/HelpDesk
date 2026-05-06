@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useState, useEffect } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { slaConfigurationService } from '@api/services'
 import Button from '@/components/shared/Button'
 import { Card } from '@/components/shared/Card'
@@ -17,13 +17,33 @@ const AMBER_THR: Record<TicketPriority, string> = {
 }
 
 export default function SlaConfigView() {
+  const qc = useQueryClient()
   const [autoEsc, setAutoEsc] = useState(true)
   const [pauseWaiting, setPauseWaiting] = useState(true)
   const [bizOnly, setBizOnly] = useState(false)
+  const [editedHours, setEditedHours] = useState<Record<string, number>>({})
 
   const { data: slaConfigs = [] } = useQuery({
     queryKey: ['slaConfigurations'],
     queryFn: () => slaConfigurationService.getAll().then(r => r.data ?? []),
+  })
+
+  useEffect(() => {
+    if (slaConfigs.length > 0) {
+      const initial: Record<string, number> = {}
+      slaConfigs.forEach(c => { initial[c.priority] = c.hoursLimit })
+      setEditedHours(initial)
+    }
+  }, [slaConfigs])
+
+  const saveMutation = useMutation({
+    mutationFn: () =>
+      Promise.all(
+        Object.entries(editedHours).map(([priority, hoursLimit]) =>
+          slaConfigurationService.update(priority, { hoursLimit })
+        )
+      ),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['slaConfigurations'] }),
   })
 
   return (
@@ -31,25 +51,35 @@ export default function SlaConfigView() {
       <PageHeader
         label="Configuración"
         title="SLA y reglas de operación"
-        actions={<Button leading="save">Guardar cambios</Button>}
+        actions={
+          <Button leading="save" disabled={saveMutation.isPending} onClick={() => saveMutation.mutate()}>
+            {saveMutation.isPending ? 'Guardando…' : 'Guardar cambios'}
+          </Button>
+        }
       />
-      <Card> <h3 className="text-base font-semibold text-on-surface mb-5">Tiempos por prioridad</h3> <div className="grid grid-cols-4 gap-4">
+
+      <Card>
+        <h3 className="text-base font-semibold text-on-surface mb-5">Tiempos por prioridad</h3>
+        <div className="grid grid-cols-4 gap-4">
           {slaConfigs.map(cfg => {
             const prio = cfg.priority as TicketPriority
             return (
               <div key={cfg.slaConfigurationId} className="bg-surface-container rounded-xl p-4 space-y-3">
                 <PriorityChip id={prio} />
-                {[
-                  { label: 'Resp. inicial', value: INITIAL_RESP[prio] ?? '—' },
-                  { label: 'Resolución',    value: `${cfg.hoursLimit} h`      },
-                  { label: 'Umbral ámbar',  value: AMBER_THR[prio] ?? '70%'  },
-                ].map(({ label, value }) => (
-                  <TextField
-                    key={label}
-                    label={label}
-                    defaultValue={value}
-                  />
-                ))}
+                <TextField
+                  label="Resp. inicial"
+                  defaultValue={INITIAL_RESP[prio] ?? '—'}
+                />
+                <TextField
+                  label="Resolución (horas)"
+                  type="number"
+                  value={editedHours[prio] ?? cfg.hoursLimit}
+                  onChange={e => setEditedHours(prev => ({ ...prev, [prio]: Number(e.target.value) }))}
+                />
+                <TextField
+                  label="Umbral ámbar"
+                  defaultValue={AMBER_THR[prio] ?? '70%'}
+                />
               </div>
             )
           })}
@@ -57,7 +87,8 @@ export default function SlaConfigView() {
       </Card>
 
       <Card>
-        <h3 className="text-base font-semibold text-on-surface mb-5">Reglas globales</h3> <div className="space-y-5">
+        <h3 className="text-base font-semibold text-on-surface mb-5">Reglas globales</h3>
+        <div className="space-y-5">
           {[
             { checked: autoEsc,      onChange: setAutoEsc,
               title: 'Escalación automática al 80% del SLA',
@@ -75,8 +106,16 @@ export default function SlaConfigView() {
       </Card>
 
       <Card>
-        <h3 className="text-base font-semibold text-on-surface mb-4">Calendario de no-laborales</h3> <div className="flex flex-wrap gap-2">
-          {['1 ene · Año Nuevo','21 mar · Benemérito Juárez','1 may · Trabajo','16 sep · Independencia','20 nov · Revolución','25 dic · Navidad'].map(d => (
+        <h3 className="text-base font-semibold text-on-surface mb-4">Calendario de no-laborales</h3>
+        <div className="flex flex-wrap gap-2">
+          {['1 ene · Año Nuevo', '21 mar · Benemérito Juárez', '1 may · Trabajo', '16 sep · Independencia', '20 nov · Revolución', '25 dic · Navidad'].map(d => (
             <span key={d} className="px-3 py-1.5 rounded-full text-xs font-medium bg-primary text-white">{d}</span>
           ))}
-          <button className="px-3 py-1.5 rounded-full text-xs font-medium border border-dashed border-outline-variant text-on-surface-variant hover:bg-surface-container"> + Añadir fecha </button> </div> </Card> </div> )}
+          <button className="px-3 py-1.5 rounded-full text-xs font-medium border border-dashed border-outline-variant text-on-surface-variant hover:bg-surface-container">
+            + Añadir fecha
+          </button>
+        </div>
+      </Card>
+    </div>
+  )
+}

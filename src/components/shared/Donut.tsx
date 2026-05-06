@@ -23,7 +23,7 @@ export default function Donut({ data, size = 160, thickness = 22, total }: Donut
         className="stroke-surface-container-high dark:stroke-dark-surface-container-high"
         strokeWidth={thickness}
       />
-      {data.map((d, i) => {
+      {sum > 0 && data.map((d, i) => {
         const len = (d.count / sum) * c
         const dasharray = `${len} ${c - len}`
         const offset = c - acc

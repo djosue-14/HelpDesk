@@ -1,1 +1,1 @@
-export type TicketStatus = 'Open' | 'InProgress' | 'Paused' | 'Closed'
+export type TicketStatus = 'Open' | 'InProgress' | 'WaitingForInfo' | 'Closed' | 'Reopened'

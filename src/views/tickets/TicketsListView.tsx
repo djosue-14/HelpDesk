@@ -22,7 +22,7 @@ type SortKey = 'updated' | 'sla' | 'priority'
 const STATUSES: { id: TicketStatus; name: string; icon: string }[] = [
   { id: 'Open',       name: 'Abierto',         icon: 'radio_button_unchecked' },
   { id: 'InProgress', name: 'En proceso',      icon: 'pending' },
-  { id: 'Paused',     name: 'Esperando info.', icon: 'hourglass_empty' },
+  { id: 'WaitingForInfo', name: 'Esperando info.', icon: 'hourglass_empty' },
   { id: 'Closed',     name: 'Cerrado',         icon: 'check_circle' },
 ]
 
@@ -36,14 +36,14 @@ const PRIORITIES: { id: TicketPriority; name: string }[] = [
 const PRIORITY_ORDER: Record<TicketPriority, number> = { Critical: 0, High: 1, Medium: 2, Low: 3 }
 
 function getSlaState(remainingPct: number, status?: TicketStatus | null): SlaState {
-  if (status === 'Paused') return 'paused'
+  if (status === 'WaitingForInfo') return 'paused'
   if (remainingPct > 50) return 'green'
   if (remainingPct > 25) return 'yellow'
   return 'red'
 }
 
 function formatSlaLabel(deadline: string, status: TicketStatus | null | undefined): string {
-  if (status === 'Paused') return 'Pausado'
+  if (status === 'WaitingForInfo') return 'Pausado'
   const ms = new Date(deadline).getTime() - Date.now()
   if (ms <= 0) return 'Vencido'
   const hours = Math.floor(ms / 3600000)
@@ -169,9 +169,9 @@ export default function Tickets({ role, query = '', scope = 'all' }: Props) {
 
   const tickets = useMemo(() => {
     let list = [...allTickets]
-    if (role.id === 'requester') list = list.filter(t => t.createdBy === user?.username)
+    // requester: backend already filters by role server-side
     if (role.id === 'agent' && scope !== 'queue') {
-      list = list.filter(t => t.assignedAgentUsername === user?.username)
+      list = list.filter(t => t.assignedAgentUsername === user?.sub)
     }
     if (statusF !== 'all') list = list.filter(t => t.status === statusF)
     if (prioF !== 'all')   list = list.filter(t => t.priority === prioF)
@@ -190,18 +190,16 @@ export default function Tickets({ role, query = '', scope = 'all' }: Props) {
         (PRIORITY_ORDER[a.priority ?? 'Low'] ?? 3) - (PRIORITY_ORDER[b.priority ?? 'Low'] ?? 3))
     }
     return list
-  }, [allTickets, statusF, prioF, deptF, slaF, sort, role.id, scope, query, user?.username])
+  }, [allTickets, statusF, prioF, deptF, slaF, sort, role.id, scope, query, user?.sub])
 
   const counts = useMemo(() => {
-    const base = role.id === 'requester'
-      ? allTickets.filter(t => t.createdBy === user?.username)
-      : role.id === 'agent' && scope !== 'queue'
-        ? allTickets.filter(t => t.assignedAgentUsername === user?.username)
-        : allTickets
+    const base = role.id === 'agent' && scope !== 'queue'
+      ? allTickets.filter(t => t.assignedAgentUsername === user?.sub)
+      : allTickets
     const r: Record<string, number> = { all: base.length }
     STATUSES.forEach(s => { r[s.id] = base.filter(t => t.status === s.id).length })
     return r
-  }, [allTickets, role.id, scope, user?.username])
+  }, [allTickets, role.id, scope, user?.sub])
 
   const title = role.id === 'requester' ? 'Mis tickets'
     : role.id === 'agent' && scope === 'queue' ? 'Cola del departamento'

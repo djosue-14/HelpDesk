@@ -5,9 +5,17 @@ import Button from '@/components/shared/Button'
 import Icon from '@/components/shared/Icon'
 import { StarsInput } from '@/components/shared/Stars'
 import { TextField } from '@/components/shared/TextField'
+import { Select } from '@/components/shared/Select'
 import { Autocomplete } from '@/components/shared/Autocomplete'
 import { Dialog, DialogHead, DialogBody, DialogFoot, DialogField } from '@/components/shared/Dialog'
 import type { TicketPriority } from '@t/enums'
+
+const RESOLUTION_CATEGORIES = [
+  { value: 'Resolved',         label: 'Resuelto'                },
+  { value: 'Rejected',         label: 'Rechazado'               },
+  { value: 'Duplicate',        label: 'Duplicado'               },
+  { value: 'ClosedNoResponse', label: 'Cerrado sin respuesta'   },
+]
 
 const PRIORITIES: { id: TicketPriority; name: string; sla: string }[] = [
   { id: 'Critical', name: 'Crítica', sla: '2 h'  },
@@ -165,18 +173,29 @@ export function ConfirmDialog({
 }
 
 /* ── Close ticket ── */
-export function CloseTicketDialog({ ticketCode, onClose, onConfirm }: { ticketCode: string; onClose: () => void; onConfirm: (resolution: string) => void }) {
-  const [resolution, setResolution] = useState('')
+export function CloseTicketDialog({ ticketCode, onClose, onConfirm }: {
+  ticketCode: string
+  onClose: () => void
+  onConfirm: (resolutionCategory: string, closingComment: string) => void
+}) {
+  const [category, setCategory] = useState('')
+  const [comment, setComment] = useState('')
   return (
     <Dialog onClose={onClose}>
       <DialogHead icon="check_circle" title={`Cerrar ticket ${ticketCode}`} onClose={onClose} />
       <DialogBody>
         <p className="text-sm text-on-surface-variant">
-          Describe la solución para que el solicitante entienda cómo se resolvió.
+          Selecciona la categoría de cierre y opcionalmente deja un comentario para el solicitante.
         </p>
+        <Select
+          label="Categoría de cierre" required
+          value={category}
+          onChange={(v) => setCategory(String(v))}
+          options={[{ value: '', label: 'Selecciona una categoría…' }, ...RESOLUTION_CATEGORIES]}
+        />
         <TextField
-          label="Resolución" required multiline rows={4}
-          value={resolution} onChange={e => setResolution(e.target.value)}
+          label="Comentario de cierre (opcional)" multiline rows={3}
+          value={comment} onChange={e => setComment(e.target.value)}
           placeholder="Ej. Se actualizó el firmware del dock WD19TBS a la versión 01.00.16; pantalla externa estable."
         />
         <div className="flex items-center gap-2 p-3 rounded-lg bg-surface-container text-sm text-on-surface-variant">
@@ -186,7 +205,7 @@ export function CloseTicketDialog({ ticketCode, onClose, onConfirm }: { ticketCo
       </DialogBody>
       <DialogFoot>
         <Button variant="text" onClick={onClose}>Cancelar</Button>
-        <Button leading="check_circle" disabled={resolution.length < 5} onClick={() => onConfirm(resolution)}>
+        <Button leading="check_circle" disabled={!category} onClick={() => onConfirm(category, comment)}>
           Cerrar ticket
         </Button>
       </DialogFoot>
@@ -195,7 +214,11 @@ export function CloseTicketDialog({ ticketCode, onClose, onConfirm }: { ticketCo
 }
 
 /* ── Redirect ticket ── */
-export function RedirectDialog({ ticketCode, onClose, onConfirm }: { ticketCode: string; onClose: () => void; onConfirm: () => void }) {
+export function RedirectDialog({ ticketCode, onClose, onConfirm }: {
+  ticketCode: string
+  onClose: () => void
+  onConfirm: (newSupportTypeId: number, reason: string) => void
+}) {
   const { data: departments = [] } = useQuery({
     queryKey: ['departments'],
     queryFn: () => departmentService.getAll().then(r => r.data ?? []),
@@ -258,7 +281,7 @@ export function RedirectDialog({ ticketCode, onClose, onConfirm }: { ticketCode:
       </DialogBody>
       <DialogFoot>
         <Button variant="text" onClick={onClose}>Cancelar</Button>
-        <Button leading="alt_route" onClick={onConfirm}>Redirigir</Button>
+        <Button leading="alt_route" disabled={typeId === null} onClick={() => onConfirm(typeId!, reason)}>Redirigir</Button>
       </DialogFoot>
     </Dialog>
   )

@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { ticketService } from '@api/services'
-import { ticketCommentService } from '@api/services'
+import { ticketService, ticketCommentService, scoreService } from '@api/services'
 import { hdGetPersonByUsername, HD_HISTORY } from '@data/seed'
 import Avatar from '@/components/shared/Avatar'
 import Button from '@/components/shared/Button'
@@ -39,14 +38,14 @@ interface Props {
 }
 
 function getSlaState(remainingPct: number, status?: TicketStatus | null): SlaState {
-  if (status === 'Paused') return 'paused'
+  if (status === 'WaitingForInfo') return 'paused'
   if (remainingPct > 50) return 'green'
   if (remainingPct > 25) return 'yellow'
   return 'red'
 }
 
 function formatSlaLabel(deadline: string, status: TicketStatus | null | undefined): string {
-  if (status === 'Paused') return 'Pausado'
+  if (status === 'WaitingForInfo') return 'Pausado'
   const ms = new Date(deadline).getTime() - Date.now()
   if (ms <= 0) return 'Vencido'
   const hours = Math.floor(ms / 3600000)
@@ -104,6 +103,59 @@ export default function TicketDetail({ role }: Props) {
     onSuccess: (res) => {
       if (res.data) setLocalComments(prev => [...prev, res.data!])
       queryClient.invalidateQueries({ queryKey: ['ticket', numericId] })
+    },
+  })
+
+  const reopenMutation = useMutation({
+    mutationFn: () => ticketService.reopen(numericId, { reason: '' }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['ticket', numericId] })
+      queryClient.invalidateQueries({ queryKey: ['requester-dashboard'] })
+      setDialog(null)
+    },
+  })
+
+  const rateMutation = useMutation({
+    mutationFn: (hasComment: boolean) =>
+      scoreService.rateTicket(numericId, { hasComment }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['ticket', numericId] })
+      setDialog(null)
+    },
+  })
+
+  const closeMutation = useMutation({
+    mutationFn: ({ resolutionCategory, closingComment }: { resolutionCategory: string; closingComment: string }) =>
+      ticketService.close(numericId, { resolutionCategory, closingComment }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['ticket', numericId] })
+      queryClient.invalidateQueries({ queryKey: ['agent-dashboard'] })
+      queryClient.invalidateQueries({ queryKey: ['tickets'] })
+      setDialog(null)
+    },
+  })
+
+  const redirectMutation = useMutation({
+    mutationFn: async ({ newSupportTypeId, reason }: { newSupportTypeId: number; reason: string }) => {
+      const res = await ticketService.redirect(numericId, { newSupportTypeId })
+      if (res.success && reason.trim())
+        await ticketCommentService.add(numericId, { content: reason, visibility: 'Internal' })
+      return res
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['ticket', numericId] })
+      queryClient.invalidateQueries({ queryKey: ['agent-dashboard'] })
+      queryClient.invalidateQueries({ queryKey: ['tickets'] })
+      setDialog(null)
+    },
+  })
+
+  const waitingMutation = useMutation({
+    mutationFn: () => ticketService.updateStatus(numericId, { newStatus: 'WaitingForInfo' }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['ticket', numericId] })
+      queryClient.invalidateQueries({ queryKey: ['agent-dashboard'] })
+      setDialog(null)
     },
   })
 
@@ -331,19 +383,22 @@ export default function TicketDetail({ role }: Props) {
 
       {/* Dialogs */}
       {dialog === 'close' && (
-        <CloseTicketDialog ticketCode={ticketCode} onClose={() => setDialog(null)} onConfirm={() => setDialog(null)} />
+        <CloseTicketDialog ticketCode={ticketCode} onClose={() => setDialog(null)}
+          onConfirm={(cat, comment) => closeMutation.mutate({ resolutionCategory: cat, closingComment: comment })} />
       )}
       {dialog === 'redirect' && (
-        <RedirectDialog ticketCode={ticketCode} onClose={() => setDialog(null)} onConfirm={() => setDialog(null)} />
+        <RedirectDialog ticketCode={ticketCode} onClose={() => setDialog(null)}
+          onConfirm={(id, reason) => redirectMutation.mutate({ newSupportTypeId: id, reason })} />
       )}
       {dialog === 'rate' && (
-        <RateDialog ticketCode={ticketCode} onClose={() => setDialog(null)} onConfirm={() => setDialog(null)} />
+        <RateDialog ticketCode={ticketCode} onClose={() => setDialog(null)}
+          onConfirm={(_stars, text) => rateMutation.mutate(text.trim().length > 0)} />
       )}
       {dialog === 'waiting' && (
         <ConfirmDialog
           icon="hourglass_empty" title="Marcar como esperando información"
           body="El ticket quedará en espera y el SLA se pausará hasta que el solicitante responda."
-          confirmLabel="Marcar como esperando" onClose={() => setDialog(null)} onConfirm={() => setDialog(null)}
+          confirmLabel="Marcar como esperando" onClose={() => setDialog(null)} onConfirm={() => waitingMutation.mutate()}
         />
       )}
       {dialog === 'cancel' && (
@@ -358,7 +413,7 @@ export default function TicketDetail({ role }: Props) {
         <ConfirmDialog
           icon="restart_alt" title="Reabrir ticket"
           body="El ticket volverá al estado «Abierto» y el equipo de soporte será notificado."
-          confirmLabel="Reabrir" onClose={() => setDialog(null)} onConfirm={() => setDialog(null)}
+          confirmLabel="Reabrir" onClose={() => setDialog(null)} onConfirm={() => reopenMutation.mutate()}
         />
       )}
     </>

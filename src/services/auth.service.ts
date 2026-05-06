@@ -1,4 +1,4 @@
-import { USE_MOCK } from '@config'
+import { USE_MOCK_AUTH } from '@config'
 import apiClient from '@api/client/apiClient'
 import type { TokenResponse } from '@t/auth'
 import type { RouteProp } from '@t/route'
@@ -51,13 +51,13 @@ const PUBLIC_ROUTES: RouteProp[] = [
 
 const authService = {
   async getWindowsAuthAuthentication(): Promise<{ success: boolean }> {
-    if (USE_MOCK) return { success: true }
+    if (USE_MOCK_AUTH) return { success: true }
     const res = await apiClient.get<{ access_token: string }>('/Auth/windows')
     return { success: !!res.data?.access_token }
   },
 
   async refreshToken(accessToken: string, refreshToken: string): Promise<TokenResponse | null> {
-    if (USE_MOCK) {
+    if (USE_MOCK_AUTH) {
       return {
         access_token: accessToken,
         refresh_token: refreshToken,
@@ -75,7 +75,7 @@ const authService = {
   },
 
   async getPrivateRoutes(userId: string): Promise<RouteProp[]> {
-    if (USE_MOCK) {
+    if (USE_MOCK_AUTH) {
       const person = Object.values(HD_PEOPLE).find(p => p.id === userId || p.username === userId)
       const role = (person?.role ?? 'requester') as keyof typeof routesByRole
       return (routesByRole[role] ?? []) as RouteProp[]
@@ -89,7 +89,7 @@ const authService = {
   },
 
   async logout(): Promise<void> {
-    if (USE_MOCK) return
+    if (USE_MOCK_AUTH) return
     await apiClient.post('/Auth/logout')
   },
 }
