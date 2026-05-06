@@ -5,6 +5,7 @@ import Button from '@/components/shared/Button'
 import Icon from '@/components/shared/Icon'
 import { StarsInput } from '@/components/shared/Stars'
 import { TextField } from '@/components/shared/TextField'
+import { Autocomplete } from '@/components/shared/Autocomplete'
 import type { TicketPriority } from '@t/enums'
 
 const PRIORITIES: { id: TicketPriority; name: string; sla: string }[] = [
@@ -58,7 +59,6 @@ function Field({ label, required, helper, children }: { label: string; required?
   )
 }
 
-const selectCls = 'w-full border border-slate-200 dark:border-dark-outline-variant rounded-lg px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary bg-surface-container-low'
 
 /* ── Create ticket ── */
 export function CreateTicketDialog({ onClose, onCreated }: { onClose: () => void; onCreated: () => void }) {
@@ -114,16 +114,26 @@ export function CreateTicketDialog({ onClose, onCreated }: { onClose: () => void
     <Scrim onClose={onClose} wide>
       <DialogHead icon="add_circle" title="Crear nuevo ticket" onClose={onClose} />
       <DialogBody>
-        <div className="grid grid-cols-2 gap-4"> <Field label="Departamento" required helper="A quién va dirigida la solicitud.">
-            <select className={selectCls} value={deptId ?? ''} onChange={e => pickDept(Number(e.target.value))}>
-              {departments.map(d => <option key={d.departmentId} value={d.departmentId}>{d.name}</option>)}
-            </select>
-          </Field>
-          <Field label="Tipo de soporte" required helper="Define la prioridad sugerida y el SLA.">
-            <select className={selectCls} value={typeId ?? ''} onChange={e => setTypeId(Number(e.target.value))}>
-              {types.map(t => <option key={t.supportTypeId} value={t.supportTypeId}>{t.name}</option>)}
-            </select>
-          </Field>
+        <div className="grid grid-cols-2 gap-4">
+          <Autocomplete
+            label="Departamento" required
+            placeholder="Buscar departamento…"
+            helperText="A quién va dirigida la solicitud."
+            value={deptId}
+            onChange={(v) => {
+              if (v === null) { setDeptId(null); setTypeId(null) }
+              else pickDept(Number(v))
+            }}
+            options={departments.map(d => ({ value: d.departmentId, label: d.name }))}
+          />
+          <Autocomplete
+            label="Tipo de soporte" required
+            placeholder="Buscar tipo…"
+            helperText="Define la prioridad sugerida y el SLA."
+            value={typeId}
+            onChange={(v) => setTypeId(v !== null ? Number(v) : null)}
+            options={types.map(t => ({ value: t.supportTypeId, label: t.name }))}
+          />
         </div>
 
         <TextField
@@ -236,20 +246,29 @@ export function RedirectDialog({ ticketCode, onClose, onConfirm }: { ticketCode:
     <Scrim onClose={onClose}>
       <DialogHead icon="alt_route" title={`Redirigir ${ticketCode}`} onClose={onClose} />
       <DialogBody>
-        <p className="text-sm text-on-surface-variant"> Reasigna este ticket a otro departamento. El SLA se reinicia al ser tomado. </p> <div className="grid grid-cols-2 gap-4"> <Field label="Departamento">
-            <select className={selectCls} value={deptId ?? ''} onChange={e => {
-              const id = Number(e.target.value)
-              setDeptId(id)
-              setTypeId(allTypes.find(t => t.departmentId === id)?.supportTypeId ?? null)
-            }}>
-              {departments.map(d => <option key={d.departmentId} value={d.departmentId}>{d.name}</option>)}
-            </select>
-          </Field>
-          <Field label="Tipo de soporte">
-            <select className={selectCls} value={typeId ?? ''} onChange={e => setTypeId(Number(e.target.value))}>
-              {types.map(t => <option key={t.supportTypeId} value={t.supportTypeId}>{t.name}</option>)}
-            </select>
-          </Field>
+        <p className="text-sm text-on-surface-variant"> Reasigna este ticket a otro departamento. El SLA se reinicia al ser tomado. </p>
+        <div className="grid grid-cols-2 gap-4">
+          <Autocomplete
+            label="Departamento"
+            placeholder="Buscar departamento…"
+            value={deptId}
+            onChange={(v) => {
+              if (v === null) { setDeptId(null); setTypeId(null) }
+              else {
+                const id = Number(v)
+                setDeptId(id)
+                setTypeId(allTypes.find(t => t.departmentId === id)?.supportTypeId ?? null)
+              }
+            }}
+            options={departments.map(d => ({ value: d.departmentId, label: d.name }))}
+          />
+          <Autocomplete
+            label="Tipo de soporte"
+            placeholder="Buscar tipo…"
+            value={typeId}
+            onChange={(v) => setTypeId(v !== null ? Number(v) : null)}
+            options={types.map(t => ({ value: t.supportTypeId, label: t.name }))}
+          />
         </div>
         <TextField
           label="Motivo" multiline rows={3}

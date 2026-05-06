@@ -12,6 +12,8 @@ import SlaBar from '@/components/shared/SlaBar'
 import Chip from '@/components/shared/Chip'
 import { Table } from '@components/shared/Table'
 import type { ColumnDef } from '@components/shared/Table'
+import { Select } from '@components/shared/Select'
+import { Autocomplete } from '@components/shared/Autocomplete'
 import type { Role } from '@/data/types'
 import type { TicketStatus, TicketPriority } from '@t/enums'
 import type { SlaState } from '@/data/types'
@@ -236,26 +238,38 @@ export default function Tickets({ role, query = '', scope = 'all' }: Props) {
             {s.name} · {counts[s.id] ?? 0}
           </Chip>
         ))}
-        <span className="flex-1" /> <select className="text-sm border border-slate-200 dark:border-dark-outline-variant rounded-lg px-3 py-1.5 bg-white dark:bg-dark-surface-container-low text-on-surface focus:outline-none focus:border-primary"
-          value={deptF} onChange={e => setDeptF(e.target.value)}>
-          <option value="all">Todos los departamentos</option>
-          {depts.map(d => <option key={d} value={d}>{d}</option>)}
-        </select>
-        <select
-          className="text-sm border border-slate-200 dark:border-dark-outline-variant rounded-lg px-3 py-1.5 bg-white dark:bg-dark-surface-container-low text-on-surface focus:outline-none focus:border-primary"
-          value={prioF} onChange={e => setPrioF(e.target.value as TicketPriority | 'all')}>
-          <option value="all">Todas las prioridades</option>
-          {PRIORITIES.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-        </select>
-        <select
-          className="text-sm border border-slate-200 dark:border-dark-outline-variant rounded-lg px-3 py-1.5 bg-white dark:bg-dark-surface-container-low text-on-surface focus:outline-none focus:border-primary"
-          value={slaF} onChange={e => setSlaF(e.target.value)}>
-          <option value="all">SLA — Cualquiera</option>
-          <option value="green">Verde</option>
-          <option value="yellow">Ámbar</option>
-          <option value="red">Rojo</option>
-          <option value="paused">Pausado</option>
-        </select>
+        <span className="flex-1" />
+        <Autocomplete
+          size="sm"
+          placeholder="Departamento"
+          value={deptF === 'all' ? null : deptF}
+          onChange={(v) => setDeptF(v !== null ? String(v) : 'all')}
+          options={depts.map(d => ({ value: d, label: d }))}
+          className="w-52"
+        />
+        <Select
+          size="sm"
+          placeholder="Todas las prioridades"
+          value={prioF}
+          onChange={(v) => setPrioF(v as TicketPriority | 'all')}
+          options={[
+            { value: 'all', label: 'Todas las prioridades' },
+            ...PRIORITIES.map(p => ({ value: p.id, label: p.name })),
+          ]}
+        />
+        <Select
+          size="sm"
+          placeholder="SLA — Cualquiera"
+          value={slaF}
+          onChange={(v) => setSlaF(String(v))}
+          options={[
+            { value: 'all', label: 'SLA — Cualquiera' },
+            { value: 'green', label: 'Verde' },
+            { value: 'yellow', label: 'Ámbar' },
+            { value: 'red', label: 'Rojo' },
+            { value: 'paused', label: 'Pausado' },
+          ]}
+        />
       </div>
 
       <Table<TicketSummaryDto>

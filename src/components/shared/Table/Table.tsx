@@ -18,6 +18,7 @@ import type {
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import Icon from '@components/shared/Icon'
 import { TextField } from '@components/shared/TextField'
+import { Select } from '@components/shared/Select'
 
 export interface RowAction<T = any> {
   id: string
@@ -152,15 +153,13 @@ const Pagination: React.FC<{ table: any; totalCount: number }> = ({ table, total
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2">
           <span className="text-sm text-on-surface-variant">Filas:</span>
-          <select
-            value={pageSize}
-            onChange={(e) => table.setPageSize(Number(e.target.value))}
-            className="px-2 py-1 text-sm bg-surface-container-low border border-outline-variant/50 rounded-lg text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
-          >
-            {[5, 10, 15, 20, 25, 50].map(size => (
-              <option key={size} value={size}>{size}</option>
-            ))}
-          </select>
+          <Select
+            size="sm"
+            value={String(pageSize)}
+            onChange={(v) => table.setPageSize(Number(v))}
+            options={[5, 10, 15, 20, 25, 50].map(s => ({ value: String(s), label: String(s) }))}
+            className="w-20"
+          />
         </div>
 
         <div className="flex items-center gap-1">
